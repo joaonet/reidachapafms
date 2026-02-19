@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rei da Chapa | Cardápio Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+        body { font-family: 'Montserrat', sans-serif; background-color: #fdf2e9; }
+        .primary-gradient { background: linear-gradient(135deg, #ffcc00 0%, #ff6600 100%); }
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: #000; color: #fff; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .method-btn.active { background-color: #f59e0b; color: white; border-color: #f59e0b; }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50 border-b-4 border-yellow-500">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h1 class="text-xl font-black text-gray-900 uppercase tracking-tighter">Rei da <span class="text-yellow-500">Chapa</span></h1>
+            </div>
+            <button onclick="toggleCart()" class="relative p-2 bg-gray-100 rounded-xl text-gray-800 hover:bg-yellow-100 transition-colors">
+                <i class="fas fa-shopping-basket text-xl"></i>
+                <span id="cart-count" class="cart-badge hidden">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="primary-gradient text-white py-10 px-4 text-center relative overflow-hidden">
+        <div class="relative z-10">
+            <h2 class="text-4xl font-black mb-2 drop-shadow-lg italic uppercase">Rei da Chapa</h2>
+            <p class="text-xs font-bold bg-black/20 inline-block px-4 py-1 rounded-full uppercase tracking-widest">Turbine seu Lanche!</p>
+        </div>
+        <i class="fas fa-fire absolute -right-10 -bottom-10 text-[180px] text-white/10 rotate-12"></i>
+    </header>
+
+    <div class="sticky top-[64px] bg-white/90 backdrop-blur-md z-40 py-4 shadow-sm">
+        <div class="flex overflow-x-auto px-4 gap-2 no-scrollbar">
+            <button onclick="filterCategory('Todos')" class="cat-btn bg-yellow-500 text-white px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap shadow-md">Todos</button>
+            <button onclick="filterCategory('Sanduíches')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap">Sanduíches</button>
+            <button onclick="filterCategory('Artesanais')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap">Artesanais</button>
+            <button onclick="filterCategory('Bebidas')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap">Bebidas</button>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 py-6 mb-20">
+        <div id="products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </main>
+
+    <div id="options-modal" class="fixed inset-0 bg-black/70 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="p-6 bg-yellow-500 text-white font-black uppercase italic flex justify-between items-center shrink-0">
+                <span id="modal-title">Turbine seu Rei</span>
+                <button onclick="closeOptions()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto" id="options-container"></div>
+            <div class="p-6 border-t bg-gray-50 shrink-0">
+                <button id="confirm-addons" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black uppercase shadow-lg">
+                    Confirmar e Adicionar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="p-6 bg-gray-900 text-white flex justify-between items-center">
+            <h2 class="text-xl font-black italic uppercase text-yellow-500">Seu Pedido</h2>
+            <button onclick="toggleCart()" class="text-white text-2xl"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div class="flex-grow overflow-y-auto p-4 space-y-6 bg-gray-50">
+            <div id="cart-items" class="space-y-3"></div>
+            
+            <div id="form-container" class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                <h3 class="text-xs font-black uppercase text-gray-400 mb-2">Informações de Entrega</h3>
+                <div class="flex gap-2 p-1 bg-gray-100 rounded-xl">
+                    <button id="btn-delivery" onclick="setMethod('Entrega')" class="method-btn active flex-1 py-2 rounded-lg font-bold text-xs transition-all">ENTREGA</button>
+                    <button id="btn-pickup" onclick="setMethod('Retirada')" class="method-btn flex-1 py-2 rounded-lg font-bold text-xs transition-all">RETIRADA</button>
+                </div>
+                
+                <input type="text" id="cust-name" placeholder="Seu Nome" class="w-full bg-gray-100 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-yellow-500">
+                
+                <div id="address-box">
+                    <textarea id="cust-address" placeholder="Endereço Completo (Rua, Número, Bairro, Referência)" class="w-full bg-gray-100 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-yellow-500 h-20"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <select id="cust-payment" class="w-full bg-gray-100 border-none rounded-xl p-3 text-sm">
+                        <option value="Pix">Pix</option>
+                        <option value="Cartão">Cartão</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                    </select>
+                    <input type="text" id="cust-change" placeholder="Troco para?" class="w-full bg-gray-100 border-none rounded-xl p-3 text-sm">
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 border-t bg-white">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-gray-500 font-bold uppercase text-xs">Total</span>
+                <span id="cart-total" class="text-3xl font-black text-orange-600">R$ 0,00</span>
+            </div>
+            <button onclick="sendOrder()" class="w-full primary-gradient text-white py-4 rounded-2xl font-black text-lg shadow-xl flex items-center justify-center gap-3 uppercase">
+                <i class="fab fa-whatsapp text-2xl"></i> Enviar Pedido
+            </button>
+        </div>
+    </div>
+
+    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55] hidden"></div>
+
+    <script>
+        const WHATSAPP_NUMBER = "5561996313040";
+        let orderMethod = "Entrega";
+        let currentAddons = [];
+        let cart = [];
+        let currentCategory = 'Todos';
+
+        const addonsList = [
+            { name: "Cheddar", price: 3.00 },
+            { name: "Catupiry", price: 3.00 },
+            { name: "Bacon", price: 3.00 },
+            { name: "Hambúrguer", price: 3.00 },
+            { name: "Ovo", price: 2.00 }
+        ];
+
+        const products = [
+            { id: 1, name: "Príncipe da Chapa", price: 13.00, desc: "Hambúrguer, Presunto e Queijo.", category: "Sanduíches", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400", hasAddons: true },
+            { id: 2, name: "Rei Clássico", price: 15.00, desc: "Hambúrguer, presunto, Queijo, Alface, Tomate e Ovo.", category: "Sanduíches", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400", hasAddons: true },
+            { id: 3, name: "Bacon Imperial", price: 18.00, desc: "Hambúrguer, Presunto, Queijo, Ovo, Milho, Alface, Tomate e Bacon.", category: "Sanduíches", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400", hasAddons: true },
+            { id: 7, name: "Rei Insano", price: 27.00, desc: "Artesanal, Frango, Calabresa, Bacon, Presunto, Queijo, Ovo, Batata e Milho.", category: "Artesanais", img: "https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?w=400", hasAddons: true },
+            { id: 8, name: "Soberano Artesanal", price: 32.00, desc: "2 Artesanais, Presunto, Queijo, Milho, Ovo, Batata e Bacon.", category: "Artesanais", img: "https://images.unsplash.com/photo-1586816001966-79b736744398?w=400", hasAddons: true },
+            { id: 50, name: "Cerveja Lata", price: 6.00, desc: "Gelada. Escolha a marca.", category: "Bebidas", img: "https://amazonasatual.com.br/wp-content/uploads/2021/12/Cervejas-em-lata-Divulgacao-800x530.jpg", options: ["Skol", "Brahma", "Heineken (+R$2)", "Amstel"] },
+            { id: 40, name: "Suco Natural Nutri 1L", price: 18.00, desc: "Escolha o sabor.", category: "Bebidas", img: "https://i.ytimg.com/vi/rmJlaiomDsY/maxresdefault.jpg", options: ["Laranja", "Uva", "Maracujá", "Goiaba"] },
+            { id: 11, name: "Refrigerante lata", price: 4.50, desc: "350ml gelado.", category: "Bebidas", img: "https://lanchonautas.com.br/wp-content/uploads/2022/05/refrilata-1.png" }
+        ];
+
+        function renderProducts() {
+            const grid = document.getElementById('products-list');
+            const filtered = currentCategory === 'Todos' ? products : products.filter(p => p.category === currentCategory);
+            grid.innerHTML = filtered.map(product => `
+                <div class="product-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                    <img src="${product.img}" class="h-44 w-full object-cover">
+                    <div class="p-4 flex-grow">
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-black text-gray-800 uppercase text-xs">${product.name}</h3>
+                            <span class="text-orange-600 font-bold text-xs">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <p class="text-gray-400 text-[10px] leading-tight">${product.desc}</p>
+                    </div>
+                    <div class="px-4 pb-4">
+                        <button onclick="openProductLogic(${product.id})" class="w-full bg-gray-900 text-white py-3 rounded-xl font-bold text-[10px] uppercase">
+                            + Adicionar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openProductLogic(productId) {
+            const product = products.find(p => p.id === productId);
+            currentAddons = [];
+            const modal = document.getElementById('options-modal');
+            const container = document.getElementById('options-container');
+            const confirmBtn = document.getElementById('confirm-addons');
+            
+            confirmBtn.classList.remove('hidden');
+
+            if (product.hasAddons) {
+                document.getElementById('modal-title').innerText = "ADICIONAIS: " + product.name;
+                container.innerHTML = `
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">Selecione os itens extras:</p>
+                    ${addonsList.map(addon => `
+                        <label class="flex justify-between items-center p-4 bg-gray-50 rounded-2xl cursor-pointer hover:bg-yellow-50 transition-colors border border-transparent">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" class="w-5 h-5 accent-yellow-500" onchange="toggleAddon('${addon.name}', ${addon.price})">
+                                <span class="text-sm font-bold text-gray-700">${addon.name}</span>
+                            </div>
+                            <span class="text-xs font-black text-orange-600">+ R$ ${addon.price.toFixed(2)}</span>
+                        </label>
+                    `).join('')}
+                `;
+                confirmBtn.onclick = () => addBurgerWithAddons(productId);
+                modal.classList.remove('hidden');
+            } else if (product.options) {
+                document.getElementById('modal-title').innerText = product.name;
+                confirmBtn.classList.add('hidden');
+                container.innerHTML = product.options.map(opt => `
+                    <button onclick="addWithOption(${product.id}, '${opt}')" class="w-full p-4 bg-gray-50 hover:bg-yellow-50 rounded-2xl text-left font-bold text-sm flex justify-between">
+                        ${opt} <i class="fas fa-chevron-right text-yellow-500"></i>
+                    </button>
+                `).join('');
+                modal.classList.remove('hidden');
+            } else {
+                addToCart(productId);
+            }
+        }
+
+        function toggleAddon(name, price) {
+            const index = currentAddons.findIndex(a => a.name === name);
+            if (index > -1) currentAddons.splice(index, 1);
+            else currentAddons.push({ name, price });
+        }
+
+        function addBurgerWithAddons(productId) {
+            const product = products.find(p => p.id === productId);
+            let finalPrice = product.price;
+            let addonNames = currentAddons.map(a => a.name);
+            let addonText = addonNames.length > 0 ? " (+ " + addonNames.join(", ") + ")" : "";
+            
+            if (currentAddons.length > 0) {
+                finalPrice += currentAddons.reduce((acc, a) => acc + a.price, 0);
+            }
+
+            const cartId = Date.now(); // ID único para cada combinação
+            cart.push({
+                ...product,
+                name: product.name + addonText,
+                price: finalPrice,
+                cartId: cartId,
+                qty: 1
+            });
+            
+            closeOptions();
+            updateCart();
+            toggleCart();
+        }
+
+        function addWithOption(productId, option) {
+            const product = products.find(p => p.id === productId);
+            let price = product.price;
+            if(option.includes("Heineken")) price += 2.0;
+            cart.push({ ...product, name: `${product.name} (${option})`, price, qty: 1, cartId: Date.now() });
+            closeOptions();
+            updateCart();
+            toggleCart();
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            cart.push({ ...product, qty: 1, cartId: Date.now() });
+            updateCart();
+            toggleCart();
+        }
+
+        function updateCart() {
+            const container = document.getElementById('cart-items');
+            const totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
+            const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            
+            document.getElementById('cart-count').innerText = totalQty;
+            document.getElementById('cart-count').classList.toggle('hidden', totalQty === 0);
+            document.getElementById('cart-total').innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
+            
+            container.innerHTML = cart.map(item => `
+                <div class="bg-white p-3 rounded-xl flex items-center gap-3 border border-gray-50">
+                    <div class="flex-grow">
+                        <h4 class="text-[10px] font-black uppercase">${item.name}</h4>
+                        <p class="text-yellow-600 font-bold text-[10px]">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+                        <button onclick="changeQty(${item.cartId}, -1)" class="px-2 text-xs">-</button>
+                        <span class="text-xs font-black">${item.qty}</span>
+                        <button onclick="changeQty(${item.cartId}, 1)" class="px-2 text-xs">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function changeQty(cartId, delta) {
+            const item = cart.find(i => i.cartId === cartId);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) cart = cart.filter(i => i.cartId !== cartId);
+            }
+            updateCart();
+        }
+
+        function closeOptions() { 
+            document.getElementById('options-modal').classList.add('hidden'); 
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+            document.getElementById('overlay').classList.toggle('hidden');
+        }
+
+        function setMethod(method) {
+            orderMethod = method;
+            document.getElementById('btn-delivery').classList.toggle('active', method === 'Entrega');
+            document.getElementById('btn-pickup').classList.toggle('active', method === 'Retirada');
+            document.getElementById('address-box').style.display = method === 'Entrega' ? 'block' : 'none';
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = btn.innerText === cat ? 
+                    "cat-btn bg-yellow-500 text-white px-5 py-2 rounded-full text-sm font-bold shadow-md" : 
+                    "cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold";
+            });
+            renderProducts();
+        }
+
+        function sendOrder() {
+            const name = document.getElementById('cust-name').value;
+            const address = document.getElementById('cust-address').value;
+            const payment = document.getElementById('cust-payment').value;
+            const change = document.getElementById('cust-change').value;
+
+            if(!name) { alert("Diga seu nome!"); return; }
+            if(orderMethod === 'Entrega' && !address) { alert("Informe o endereço!"); return; }
+            if(cart.length === 0) { alert("Carrinho vazio!"); return; }
+
+            let msg = `👑 *REI DA CHAPA - NOVO PEDIDO*\n`;
+            msg += `------------------------------\n`;
+            msg += `*TIPO:* ${orderMethod.toUpperCase()}\n`;
+            msg += `*CLIENTE:* ${name}\n`;
+            
+            if(orderMethod === 'Entrega') {
+                msg += `*ENDEREÇO:* ${address}\n`;
+            }
+
+            msg += `------------------------------\n`;
+            msg += `*PEDIDO:*\n`;
+            cart.forEach(item => {
+                msg += `• ${item.qty}x ${item.name} - R$ ${(item.price * item.qty).toFixed(2)}\n`;
+            });
+
+            msg += `------------------------------\n`;
+            msg += `*PAGAMENTO:* ${payment}\n`;
+            if(payment === 'Dinheiro' && change) {
+                msg += `*TROCO PARA:* ${change}\n`;
+            }
+            msg += `\n💰 *TOTAL:* ${document.getElementById('cart-total').innerText}`;
+
+            window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`);
+        }
+
+        window.onload = renderProducts;
+    </script>
+</body>
+</html>

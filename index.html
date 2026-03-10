@@ -13,6 +13,42 @@
         .cart-badge { position: absolute; top: -5px; right: -5px; background: #000; color: #fff; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .method-btn.active { background-color: #f59e0b; color: white; border-color: #f59e0b; }
+        
+        /* IMAGENS GRANDES */
+        .img-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            overflow: hidden;
+            height: 512px; 
+        }
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .category-bebidas .img-container img {
+            object-fit: contain; 
+            padding: 20px;
+        }
+
+        /* TEXTO ILUSTRATIVO AUMENTADO EM 1X (DOBRO) */
+        .ilustrativa-tag {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            font-style: italic;
+            font-weight: 800;
+            color: #666;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 4px 12px;
+            border-radius: 99px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 16px; 
+            letter-spacing: 0.5px;
+        }
+
         .product-card { transition: transform 0.2s; }
         .product-card:active { transform: scale(0.98); }
     </style>
@@ -49,40 +85,39 @@
                     <i class="fas fa-clock"></i>
                 </div>
                 <div>
-                    <h4 class="text-xs font-black uppercase text-gray-900">Horário de Delivery</h4>
+                    <h4 class="text-xs font-black uppercase text-gray-900">Status da Loja</h4>
                     <p class="text-[10px] font-bold text-gray-500 uppercase">Apenas para Entrega</p>
                 </div>
             </div>
             <div class="text-right">
-                <span id="status-loja" class="text-[10px] font-black px-2 py-1 rounded-md uppercase">Verificando...</span>
-                <p class="text-sm font-black text-gray-800 mt-1">18:00 às 22:30</p>
+                <span id="status-loja" class="text-[10px] font-black px-2 py-1 rounded-md uppercase italic">Verificando...</span>
+                <p id="display-horario" class="text-sm font-black text-gray-800 mt-1">18:00 às 22:30</p>
             </div>
         </div>
     </div>
 
     <div class="sticky top-[64px] bg-white/90 backdrop-blur-md z-40 py-4 shadow-sm mt-4">
         <div class="flex overflow-x-auto px-4 gap-2 no-scrollbar">
-            <button onclick="filterCategory('Todos')" class="cat-btn bg-yellow-500 text-white px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap shadow-md">Todos</button>
-            <button onclick="filterCategory('Sanduiches')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap">Sanduíches</button>
-            <button onclick="filterCategory('Artesanais')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap">Artesanais</button>
-            <button onclick="filterCategory('Bebidas')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap">Bebidas</button>
+            <button id="btn-Sanduiches" onclick="filterCategory('Sanduiches')" class="cat-btn bg-yellow-500 text-white px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap shadow-md">Sanduíches</button>
+            <button id="btn-Artesanais" onclick="filterCategory('Artesanais')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap">Artesanais</button>
+            <button id="btn-Bebidas" onclick="filterCategory('Bebidas')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap">Bebidas</button>
         </div>
     </div>
 
     <main class="container mx-auto px-4 py-6 mb-20">
-        <div id="products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        <div id="products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
     <div id="options-modal" class="fixed inset-0 bg-black/70 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+        <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col max-h-[85vh] relative">
             <div class="p-6 bg-yellow-500 text-white font-black uppercase italic flex justify-between items-center shrink-0">
                 <span id="modal-title">Turbine seu Rei</span>
                 <button onclick="closeOptions()"><i class="fas fa-times"></i></button>
             </div>
-            <div class="p-6 space-y-4 overflow-y-auto" id="options-container"></div>
-            <div class="p-6 border-t bg-gray-50 shrink-0">
-                <button id="confirm-addons" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black uppercase shadow-lg">
-                    Confirmar e Adicionar
+            <div class="p-6 space-y-4 overflow-y-auto pb-24" id="options-container"></div>
+            <div class="absolute bottom-6 left-0 w-full px-6">
+                <button id="confirm-addons" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black uppercase shadow-xl flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i> Confirmar e Adicionar
                 </button>
             </div>
         </div>
@@ -93,23 +128,18 @@
             <h2 class="text-xl font-black italic uppercase text-yellow-500">Seu Pedido</h2>
             <button onclick="toggleCart()" class="text-white text-2xl"><i class="fas fa-times"></i></button>
         </div>
-        
         <div class="flex-grow overflow-y-auto p-4 space-y-6 bg-gray-50">
             <div id="cart-items" class="space-y-3"></div>
-            
             <div id="form-container" class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-4">
                 <h3 class="text-xs font-black uppercase text-gray-400 mb-2">Informações de Entrega</h3>
                 <div class="flex gap-2 p-1 bg-gray-100 rounded-xl">
                     <button id="btn-delivery" onclick="setMethod('Entrega')" class="method-btn active flex-1 py-2 rounded-lg font-bold text-xs transition-all">ENTREGA</button>
                     <button id="btn-pickup" onclick="setMethod('Retirada')" class="method-btn flex-1 py-2 rounded-lg font-bold text-xs transition-all">RETIRADA</button>
                 </div>
-                
                 <input type="text" id="cust-name" placeholder="Seu Nome" class="w-full bg-gray-100 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-yellow-500">
-                
                 <div id="address-box">
                     <textarea id="cust-address" placeholder="Endereço Completo (Rua, Número, Bairro, Referência)" class="w-full bg-gray-100 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-yellow-500 h-20"></textarea>
                 </div>
-
                 <div class="grid grid-cols-2 gap-3">
                     <select id="cust-payment" class="w-full bg-gray-100 border-none rounded-xl p-3 text-sm">
                         <option value="Pix">Pix</option>
@@ -120,7 +150,6 @@
                 </div>
             </div>
         </div>
-
         <div class="p-6 border-t bg-white">
             <div class="flex justify-between items-center mb-6">
                 <span class="text-gray-500 font-bold uppercase text-xs">Total</span>
@@ -134,12 +163,39 @@
 
     <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55] hidden"></div>
 
+    <div id="admin-modal" class="fixed inset-0 bg-black/90 z-[200] hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl">
+            <h2 class="text-xl font-black mb-4 uppercase">Painel Administrativo</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Status manual da Loja</label>
+                    <select id="admin-status-select" class="w-full bg-gray-100 p-3 rounded-xl font-bold mt-1">
+                        <option value="aberto">ABERTO</option>
+                        <option value="fechado">FECHADO</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Texto do Horário</label>
+                    <input type="text" id="admin-horario-input" class="w-full bg-gray-100 p-3 rounded-xl mt-1 text-sm font-bold" placeholder="Ex: 18:00 às 22:30">
+                </div>
+                <button onclick="saveAdminChanges()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg">Salvar Configurações</button>
+                <button onclick="closeAdmin()" class="w-full text-gray-400 text-xs font-bold uppercase py-2 text-center">Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-10 text-center opacity-20">
+        <button onclick="openAdminPrompt()" class="text-[9px] uppercase font-bold tracking-widest">Acesso Administrativo</button>
+    </footer>
+
     <script>
         const WHATSAPP_NUMBER = "61999179675";
+        const ADMIN_PASS = "Fazenda51@"; // SENHA ATUALIZADA AQUI
+        
         let orderMethod = "Entrega";
         let currentAddons = [];
         let cart = [];
-        let currentCategory = 'Todos';
+        let currentCategory = 'Sanduiches';
 
         const addonsList = [
             { name: "Cheddar", price: 3.00 },
@@ -149,61 +205,92 @@
         ];
 
         const products = [
-            // SANDUÍCHES (Padrão/Industrializados)
             { id: 1, name: "Príncipe da Chapa", price: 13.00, desc: "Hambúrguer, Presunto e Queijo.", category: "Sanduiches", img: "https://www.estadao.com.br/resizer/aQ0_ezgaRvEwF__UfwM-NAkqAsc=/720x503/filters:format(jpg):quality(80):focal(540x315:550x325)/cloudfront-us-east-1.images.arcpublishing.com/estadao/77XTHHCCLBEXLC2Y5RK4PN37CE.jpg", hasAddons: true },
             { id: 2, name: "Rei Clássico", price: 15.00, desc: "Hambúrguer, presunto, Queijo, Alface, Tomate e Ovo.", category: "Sanduiches", img: "https://img.freepik.com/fotos-premium/hamburguer-delicioso-em-fundo-de-madeira-hamburguer-com-carne-de-alface-tomate-e-queijo_433165-4.jpg", hasAddons: true },
             { id: 3, name: "Bacon Imperial", price: 18.00, desc: "Hambúrguer, Presunto, Queijo, Ovo, Milho, Alface, Tomate e Bacon.", category: "Sanduiches", img: "https://static.wixstatic.com/media/114454_758f742acd454b6abe9c56faa1eb618a~mv2.jpg/v1/fill/w_980,h_756,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/114454_758f742acd454b6abe9c56faa1eb618a~mv2.jpg", hasAddons: true },
             { id: 4, name: "Imperial Chicken", price: 21.00, desc: "Filé de frango, Presunto, Queijo, Milho, Ovo, Alface e Tomate.", category: "Sanduiches", img: "https://imagens.jotaja.com/produtos/3841/13EC1410B080623C2BF1E4EE976316A89409F0107A23C15359D6F52797C380A1.jpeg", hasAddons: true },
             { id: 5, name: "Duelo Real", price: 23.00, desc: "Hambúrguer, Filé de frango, Presunto, Queijo, Bacon, Ovo, Alface e Tomate.", category: "Sanduiches", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=500", hasAddons: true },
             { id: 6, name: "Imperador Mignon", price: 26.00, desc: "Filé mignon, Presunto, Queijo, Milho, Ovo, Alface, Tomate.", category: "Sanduiches", img: "https://images.unsplash.com/photo-1521305916504-4a1121188589?q=80&w=500", hasAddons: true },
-
-            // ARTESANAIS
             { id: 7, name: "Rei Insano", price: 27.00, desc: "Hambúrguer Artesanal, Filé de frango, Calabresa, Bacon, Presunto, Queijo, Ovo, Batata, Milho, Alface e Tomate.", category: "Artesanais", img: "https://tse4.mm.bing.net/th/id/OIP.0kbGCSI19_hbJBNLmOWN1gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", hasAddons: true },
             { id: 8, name: "Soberano Artesanal", price: 32.00, desc: "Dois hambúrgueres artesanais, Presunto, Queijo, Milho, Ovo, Batata, Alface, Tomate e Bacon.", category: "Artesanais", img: "https://tse3.mm.bing.net/th/id/OIP._ukZ8NYAT2Js62cjAzqawgHaGh?rs=1&pid=ImgDetMain&o=7&rm=3", hasAddons: true },
             { id: 9, name: "Rei dos Reis", price: 37.00, desc: "2 Hambúrgueres Artesanais, Filé de frango, 2 Ovos, Calabresa, Bacon, Presunto, Queijo, Alface e Tomate.", category: "Artesanais", img: "https://imagens.jotaja.com/produtos/d4a28843-7b32-4f40-bce6-c491f8851421.jpg", hasAddons: true },
-
-            // BEBIDAS (Ajustadas conforme sua preferência)
-            { id: 10, name: "Cerveja lata", price: 4.50, desc: "Lata 350ml gelada.", category: "Bebidas", img: "https://amazonasatual.com.br/wp-content/uploads/2021/12/Cervejas-em-lata-Divulgacao-800x530.jpg", options: ["Skol", "Brahma", "Antarctica"] },
-            { id: 11, name: "Refrigerante lata", price: 4.50, desc: "Lata 350ml gelada.", category: "Bebidas", img: "https://lanchonautas.com.br/wp-content/uploads/2022/05/refrilata-1.png", options: ["Coca-Cola", "Guaraná", "Fanta"] },
-            { id: 12, name: "Suco Nutri 1L", price: 5.50, desc: "Garrafa de 1 Litro.", category: "Bebidas", img: "https://i.ytimg.com/vi/rmJlaiomDsY/maxresdefault.jpg", options: ["Laranja", "Uva", "Goiaba"] },
-            { id: 13, name: "Coca Cola 1,5L", price: 10.50, desc: "Garrafa gelada.", category: "Bebidas", img: "https://tdc0wy.vteximg.com.br/arquivos/ids/159102-1000-1000/REFRIGERANTE-COCA-COLA-PET-15L-ORIGINAL.png?v=638121787162800000" }
+            { id: 16, name: "Rei Bacana", price: 35.00, desc: "Pão, alface, Hambúrguer artesanal, bacon, ovo, presunto, mussarela, tomate e pickles.", category: "Artesanais", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=500", hasAddons: true },
+            { id: 10, name: "Cerveja lata", price: 4.50, desc: "Gelada.", category: "Bebidas", img: "https://amazonasatual.com.br/wp-content/uploads/2021/12/Cervejas-em-lata-Divulgacao-800x530.jpg", options: ["Skol", "Brahma", "Antarctica"] },
+            { id: 11, name: "Refrigerante lata", price: 4.50, desc: "Gelada.", category: "Bebidas", img: "https://lanchonautas.com.br/wp-content/uploads/2022/05/refrilata-1.png", options: ["Coca-Cola", "Guaraná", "Fanta"] },
+            { id: 13, name: "Coca Cola 1,5L", price: 10.50, desc: "Garrafa gelada.", category: "Bebidas", img: "https://tdc0wy.vteximg.com.br/arquivos/ids/159102-1000-1000/REFRIGERANTE-COCA-COLA-PET-15L-ORIGINAL.png?v=638121787162800000" },
+            { id: 12, name: "Suco Del Valle Maracujá", price: 10.70, desc: "1 Litro - Gelado.", category: "Bebidas", img: "https://www.bernardaoemcasa.com.br/media/catalog/product/cache/1/image/500x500/9df78eab33525d08d6e5fb8d27136e95/3/d/3d_front_view_v1_del_valle_nectar_maracuja_tetrabrik_1000ml_1573_mainline_seca.png" },
+            { id: 14, name: "Suco Del Valle Pêssego", price: 10.70, desc: "1 Litro - Gelado.", category: "Bebidas", img: "https://http2.mlstatic.com/D_NQ_NP_2X_778083-MLA92206226691_092025-F.webp" },
+            { id: 15, name: "Suco Del Valle Uva", price: 10.70, desc: "1 Litro - Gelado.", category: "Bebidas", img: "https://mercantilnovaera.vtexassets.com/arquivos/ids/220480-1200-auto?v=638798909754400000&width=1200&height=auto&aspect=true" }
         ];
 
         function checkStatus() {
             const statusTag = document.getElementById('status-loja');
-            const agora = new Date();
-            const hora = agora.getHours();
-            if (hora >= 18 && hora < 22) {
+            const statusSalvo = localStorage.getItem('rei_status') || 'aberto';
+            document.getElementById('display-horario').innerText = localStorage.getItem('rei_horario') || '18:00 às 22:30';
+            if (statusSalvo === 'aberto') {
                 statusTag.innerText = "Aberto";
-                statusTag.className = "bg-green-100 text-green-700 text-[10px] font-black px-2 py-1 rounded-md uppercase";
+                statusTag.className = "bg-green-100 text-green-700 text-[10px] font-black px-2 py-1 rounded-md uppercase italic";
                 return true;
             } else {
                 statusTag.innerText = "Fechado";
-                statusTag.className = "bg-red-100 text-red-700 text-[10px] font-black px-2 py-1 rounded-md uppercase";
+                statusTag.className = "bg-red-100 text-red-700 text-[10px] font-black px-2 py-1 rounded-md uppercase italic";
                 return false;
             }
         }
 
+        function openAdminPrompt() {
+            const pass = prompt("Senha Administrativa:");
+            if (pass === ADMIN_PASS) {
+                document.getElementById('admin-modal').classList.remove('hidden');
+                document.getElementById('admin-status-select').value = localStorage.getItem('rei_status') || 'aberto';
+                document.getElementById('admin-horario-input').value = localStorage.getItem('rei_horario') || '18:00 às 22:30';
+            } else if (pass !== null) { alert("Senha Incorreta!"); }
+        }
+
+        function saveAdminChanges() {
+            localStorage.setItem('rei_status', document.getElementById('admin-status-select').value);
+            localStorage.setItem('rei_horario', document.getElementById('admin-horario-input').value);
+            alert("Salvo!"); closeAdmin(); checkStatus();
+        }
+
+        function closeAdmin() { document.getElementById('admin-modal').classList.add('hidden'); }
+
         function renderProducts() {
             const grid = document.getElementById('products-list');
-            const filtered = currentCategory === 'Todos' ? products : products.filter(p => p.category === currentCategory);
+            grid.className = `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 category-${currentCategory.toLowerCase()}`;
+            const filtered = products.filter(p => p.category === currentCategory);
             grid.innerHTML = filtered.map(product => `
-                <div class="product-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-                    <img src="${product.img}" class="h-44 w-full object-cover">
-                    <div class="p-4 flex-grow">
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="font-black text-gray-800 uppercase text-xs">${product.name}</h3>
-                            <span class="text-orange-600 font-bold text-xs">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
-                        </div>
-                        <p class="text-gray-400 text-[10px] leading-tight">${product.desc}</p>
+                <div class="product-card bg-white rounded-3xl shadow-md border border-gray-100 overflow-hidden flex flex-col h-full">
+                    <div class="img-container relative w-full">
+                        <img src="${product.img}">
+                        <span class="ilustrativa-tag">*Ilustrativa</span>
                     </div>
-                    <div class="px-4 pb-4">
-                        <button onclick="openProductLogic(${product.id})" class="w-full bg-gray-900 text-white py-3 rounded-xl font-bold text-[10px] uppercase">
+                    <div class="p-5 flex-grow">
+                        <div class="flex justify-between items-start mb-2 gap-2">
+                            <h3 class="font-black text-gray-900 uppercase text-md tracking-tighter leading-tight">${product.name}</h3>
+                            <span class="text-orange-600 font-black text-lg whitespace-nowrap">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <p class="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">${product.desc}</p>
+                    </div>
+                    <div class="px-5 pb-5 mt-auto">
+                        <button onclick="openProductLogic(${product.id})" class="w-full bg-gray-900 text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg active:scale-95 transition-transform">
                             + Adicionar
                         </button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                const btnText = btn.innerText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                const catText = cat.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                btn.className = (btnText === catText) 
+                    ? "cat-btn bg-yellow-500 text-white px-5 py-2 rounded-full text-sm font-bold shadow-md whitespace-nowrap" 
+                    : "cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap";
+            });
+            renderProducts();
         }
 
         function openProductLogic(productId) {
@@ -212,23 +299,17 @@
             const modal = document.getElementById('options-modal');
             const container = document.getElementById('options-container');
             const confirmBtn = document.getElementById('confirm-addons');
-            
             confirmBtn.classList.remove('hidden');
-
             if (product.hasAddons) {
                 document.getElementById('modal-title').innerText = "ADICIONAIS: " + product.name;
-                container.innerHTML = `
-                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">Deseja dar um upgrade?</p>
-                    ${addonsList.map(addon => `
-                        <label class="flex justify-between items-center p-4 bg-gray-50 rounded-2xl cursor-pointer hover:bg-yellow-50 transition-colors border border-transparent mb-2">
-                            <div class="flex items-center gap-3">
-                                <input type="checkbox" class="w-5 h-5 accent-yellow-500" onchange="toggleAddon('${addon.name}', ${addon.price})">
-                                <span class="text-sm font-bold text-gray-700">${addon.name}</span>
-                            </div>
-                            <span class="text-xs font-black text-orange-600">+ R$ ${addon.price.toFixed(2)}</span>
-                        </label>
-                    `).join('')}
-                `;
+                container.innerHTML = `<p class="text-[10px] font-bold text-gray-400 uppercase mb-2">Deseja dar um upgrade?</p>` + addonsList.map(addon => `
+                    <label class="flex justify-between items-center p-4 bg-gray-50 rounded-2xl cursor-pointer hover:bg-yellow-50 transition-colors border border-transparent mb-2">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" class="w-5 h-5 accent-yellow-500" onchange="toggleAddon('${addon.name}', ${addon.price})">
+                            <span class="text-sm font-bold text-gray-700">${addon.name}</span>
+                        </div>
+                        <span class="text-xs font-black text-orange-600">+ R$ ${addon.price.toFixed(2)}</span>
+                    </label>`).join('');
                 confirmBtn.onclick = () => addWithAddons(productId);
                 modal.classList.remove('hidden');
             } else if (product.options) {
@@ -237,12 +318,9 @@
                 container.innerHTML = product.options.map(opt => `
                     <button onclick="addWithOption(${product.id}, '${opt}')" class="w-full p-4 bg-gray-50 hover:bg-yellow-50 rounded-2xl text-left font-bold text-sm flex justify-between mb-2">
                         ${opt} <i class="fas fa-chevron-right text-yellow-500"></i>
-                    </button>
-                `).join('');
+                    </button>`).join('');
                 modal.classList.remove('hidden');
-            } else {
-                addToCartSimple(productId);
-            }
+            } else { addToCartSimple(productId); }
         }
 
         function toggleAddon(name, price) {
@@ -257,28 +335,14 @@
             let addonNames = currentAddons.map(a => a.name);
             let addonText = addonNames.length > 0 ? " (+ " + addonNames.join(", ") + ")" : "";
             finalPrice += currentAddons.reduce((acc, a) => acc + a.price, 0);
-
-            cart.push({
-                ...product,
-                name: product.name + addonText,
-                price: finalPrice,
-                cartId: Date.now(),
-                qty: 1
-            });
-            closeOptions();
-            updateCart();
+            cart.push({ ...product, name: product.name + addonText, price: finalPrice, cartId: Date.now(), qty: 1 });
+            closeOptions(); updateCart();
         }
 
         function addWithOption(productId, option) {
             const product = products.find(p => p.id === productId);
-            cart.push({ 
-                ...product, 
-                name: `${product.name} [${option}]`, 
-                qty: 1, 
-                cartId: Date.now() 
-            });
-            closeOptions();
-            updateCart();
+            cart.push({ ...product, name: `${product.name} [${option}]`, qty: 1, cartId: Date.now() });
+            closeOptions(); updateCart();
         }
 
         function addToCartSimple(productId) {
@@ -291,11 +355,9 @@
             const container = document.getElementById('cart-items');
             const totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
             const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            
             document.getElementById('cart-count').innerText = totalQty;
             document.getElementById('cart-count').classList.toggle('hidden', totalQty === 0);
             document.getElementById('cart-total').innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
-            
             container.innerHTML = cart.map(item => `
                 <div class="bg-white p-3 rounded-xl flex items-center gap-3 border border-gray-100 shadow-sm">
                     <div class="flex-grow">
@@ -307,8 +369,7 @@
                         <span class="text-xs font-black w-4 text-center">${item.qty}</span>
                         <button onclick="changeQty(${item.cartId}, 1)" class="w-6 h-6 flex items-center justify-center font-bold">+</button>
                     </div>
-                </div>
-            `).join('');
+                </div>`).join('');
         }
 
         function changeQty(cartId, delta) {
@@ -333,54 +394,26 @@
             document.getElementById('address-box').style.display = method === 'Entrega' ? 'block' : 'none';
         }
 
-        function filterCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                const isActive = btn.innerText.includes(cat) || (cat === 'Todos' && btn.innerText === 'Todos');
-                btn.className = isActive ? 
-                    "cat-btn bg-yellow-500 text-white px-5 py-2 rounded-full text-sm font-bold shadow-md whitespace-nowrap" : 
-                    "cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap";
-            });
-            renderProducts();
-        }
-
         function sendOrder() {
-            if (!checkStatus()) {
-                alert("O Rei da Chapa está fechado! Horário: 18h às 22:30h.");
-                return;
-            }
-
+            if (!checkStatus()) { alert("O Rei da Chapa está fechado no momento!"); return; }
             const name = document.getElementById('cust-name').value;
             const address = document.getElementById('cust-address').value;
             const payment = document.getElementById('cust-payment').value;
             const change = document.getElementById('cust-change').value;
-
             if(!name) { alert("Diga seu nome!"); return; }
             if(orderMethod === 'Entrega' && !address) { alert("Informe o endereço!"); return; }
             if(cart.length === 0) { alert("Carrinho vazio!"); return; }
-
-            let msg = `👑 *REI DA CHAPA - NOVO PEDIDO*\n`;
-            msg += `------------------------------\n`;
-            msg += `*TIPO:* ${orderMethod.toUpperCase()}\n`;
-            msg += `*CLIENTE:* ${name}\n`;
+            let msg = `👑 *REI DA CHAPA - NOVO PEDIDO*\n------------------------------\n*TIPO:* ${orderMethod.toUpperCase()}\n*CLIENTE:* ${name}\n`;
             if(orderMethod === 'Entrega') msg += `*ENDEREÇO:* ${address}\n`;
-            msg += `------------------------------\n`;
-            msg += `*PEDIDO:*\n`;
-            cart.forEach(item => {
-                msg += `• ${item.qty}x ${item.name} - R$ ${(item.price * item.qty).toFixed(2)}\n`;
-            });
-            msg += `------------------------------\n`;
-            msg += `*PAGAMENTO:* ${payment}\n`;
+            msg += `------------------------------\n*PEDIDO:*\n`;
+            cart.forEach(item => { msg += `• ${item.qty}x ${item.name} - R$ ${(item.price * item.qty).toFixed(2)}\n`; });
+            msg += `------------------------------\n*PAGAMENTO:* ${payment}\n`;
             if(payment === 'Dinheiro' && change) msg += `*TROCO PARA:* ${change}\n`;
             msg += `\n💰 *TOTAL:* ${document.getElementById('cart-total').innerText}`;
-
             window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`);
         }
 
-        window.onload = () => {
-            renderProducts();
-            checkStatus();
-        };
+        window.onload = () => { checkStatus(); renderProducts(); };
     </script>
 </body>
 </html>

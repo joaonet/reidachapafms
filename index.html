@@ -176,6 +176,7 @@
             <button id="btn-Combos" onclick="filterCategory('Combos')" class="cat-tab py-3 text-xs font-black uppercase tracking-widest text-neutral-400 border-b-3 border-transparent whitespace-nowrap transition-all">Combos</button>
             <button id="btn-Sanduiches" onclick="filterCategory('Sanduiches')" class="cat-tab active py-3 text-xs font-black uppercase tracking-widest text-amber-500 border-b-3 border-amber-500 whitespace-nowrap transition-all">Sanduíches</button>
             <button id="btn-Artesanais" onclick="filterCategory('Artesanais')" class="cat-tab py-3 text-xs font-black uppercase tracking-widest text-neutral-400 border-b-3 border-transparent whitespace-nowrap transition-all">Artesanais</button>
+            <button id="btn-Porções" onclick="filterCategory('Porções')" class="cat-tab py-3 text-xs font-black uppercase tracking-widest text-neutral-400 border-b-3 border-transparent whitespace-nowrap transition-all">Porções</button>
             <button id="btn-Bebidas" onclick="filterCategory('Bebidas')" class="cat-tab py-3 text-xs font-black uppercase tracking-widest text-neutral-400 border-b-3 border-transparent whitespace-nowrap transition-all">Bebidas</button>
         </div>
     </header>
@@ -184,7 +185,7 @@
     <section class="hero-banner relative border-b border-amber-500/20 py-14 sm:py-20 px-4 overflow-hidden">
         <div class="relative z-10 max-w-6xl mx-auto">
             <div class="max-w-xl text-left">
-                <span class="inline-flex items-center gap-2 bg-amber-500 text-black text-[10px] font-black uppercase px-3 py-1.5 rounded-full tracking-widest"><i class="fas fa-fire"></i> Feito na chapa, servido quente</span>
+                <span class="inline-flex items-center gap-2 bg-amber-500 text-black text-[10px] font-black uppercase px-3 py-1.5 rounded-full tracking-widest"><i class="fas fa-fire"></i> Sabor de verdade</span>
                 <h2 class="hero-title text-5xl sm:text-7xl font-black uppercase italic text-white mt-4 leading-[0.9]">O sabor que<br><span class="text-amber-400">manda.</span></h2>
                 <p class="text-sm sm:text-base text-neutral-200 mt-4 max-w-md font-medium leading-relaxed">Hambúrguer de verdade, ingredientes caprichados e aquele sabor que chega chegando.</p>
                 <div class="flex flex-wrap gap-3 mt-7">
@@ -340,7 +341,7 @@
         { id: 7, name: "Rei Insano", price: 27.00, desc: "Hambúrguer Artesanal, Filé de frango, Calabresa, Bacon, Presunto, Queijo, Ovo, Batata, Milho, Alface e Tomate.", category: "Artesanais", img: "https://imagens.jotaja.com/produtos/3c224dd9-4586-496b-9916-7245603d2ccc.jpg", hasAddons: true },
         { id: 8, name: "Soberano Artesanal", price: 32.00, desc: "Dois hambúrgueres artesanais, Presunto, Queijo, Milho, Ovo, Batata, Alface, Tomate e Bacon.", category: "Artesanais", img: "https://tse3.mm.bing.net/th/id/OIP._ukZ8NYAT2Js62cjAzqawgHaGh?rs=1&pid=ImgDetMain&o=7&rm=3", hasAddons: true },
         { id: 9, name: "Rei dos Reis", price: 37.00, desc: "2 Hambúrgueres Artesanais, Filé de frango, 2 Ovos, Calabresa, Bacon, Presunto, Queijo, Alface e Tomate.", category: "Artesanais", img: "https://imagens.jotaja.com/produtos/d4a28843-7b32-4f40-bce6-c491f8851421.jpg", hasAddons: true },
-        { id: 17, name: "Batata Média", price: 7.00, desc: "Porção individual de batatas crocantes (aprox. 150g).", category: "Artesanais", img: "https://cdn.awsli.com.br/2500x2500/2757/2757108/produto/384467320/49-gckgieaxow.png", hasAddons: true },
+        { id: 17, name: "Batata Média", price: 7.00, desc: "Porção individual de batatas crocantes (aprox. 150g).", category: "Porções", img: "https://cdn.awsli.com.br/2500x2500/2757/2757108/produto/384467320/49-gckgieaxow.png", hasAddons: false, badge: "" },
         
         // BEBIDAS
         { id: 10, name: "Cerveja lata", price: 4.50, desc: "Skol, Brahma ou Antarctica.", category: "Bebidas", img: "https://amazonasatual.com.br/wp-content/uploads/2021/12/Cervejas-em-lata-Divulgacao-800x530.jpg", options: ["Skol", "Brahma", "Antarctica"] },
@@ -361,7 +362,7 @@
                 <div>
                     <div class="bravo-img-container">
                         <img src="${p.img}" alt="${p.name}" loading="lazy">
-                        <span class="absolute left-3 top-3 z-10 bg-black/75 text-amber-300 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider">${p.id === 2 ? 'Mais pedido' : p.category === 'Bebidas' ? 'Gelada' : 'Na chapa'}</span>
+                        ${p.badge !== "" ? `<span class="absolute left-3 top-3 z-10 bg-black/75 text-amber-300 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider">${p.badge || (p.id === 2 ? 'Mais pedido' : p.category === 'Bebidas' ? 'Gelada' : 'Na chapa')}</span>` : ''}
                     </div>
                     <div class="p-5 pb-4">
                         <h3 class="font-black text-lg text-white uppercase tracking-wide mb-1">${p.name}</h3>

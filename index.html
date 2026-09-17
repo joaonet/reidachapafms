@@ -5,384 +5,579 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rei da Chapa | Cardápio Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
-        body { font-family: 'Montserrat', sans-serif; background-color: #fdf2e9; }
-        .primary-gradient { background: linear-gradient(135deg, #ffcc00 0%, #ff6600 100%); }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: #000; color: #fff; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; }
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap');
+        
+        :root {
+            --brand-gold: #ffc400;
+            --brand-red: #e21b23;
+            --ink: #0d0d0d;
+            --panel: #191817;
+            --muted: #aaa39b;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--ink);
+            background-image: radial-gradient(circle at 15% 10%, rgba(226, 27, 35, 0.16), transparent 28%), radial-gradient(circle at 88% 32%, rgba(255, 196, 0, 0.09), transparent 24%);
+            color: #ffffff;
+        }
+
+        h1, h2, h3, .cat-tab, button { font-family: 'Barlow Condensed', 'Montserrat', sans-serif; }
+
+        .text-brand-gold { color: var(--brand-gold); }
+        .bg-brand-gold { background-color: var(--brand-gold); }
+
+        body .bg-amber-500 { background-color: var(--brand-gold) !important; }
+        body .text-amber-500, body .text-amber-400 { color: var(--brand-gold) !important; }
+        body .border-amber-500 { border-color: var(--brand-red) !important; }
+        body .border-amber-500\/20 { border-color: rgba(226, 27, 35, 0.35) !important; }
+        body .shadow-amber-500\/20 { --tw-shadow-color: rgba(255, 196, 0, 0.22) !important; }
+        
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .method-btn.active { background-color: #f59e0b; color: white; border-color: #f59e0b; }
-        
-        .img-container {
-            display: flex; align-items: center; justify-content: center;
-            background-color: #fff; overflow: hidden; height: 180px; position: relative;
-        }
-        .img-container img { width: 100%; height: 100%; object-fit: cover; }
-        .category-bebidas .img-container img { object-fit: contain; padding: 12px; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .ilustrativa-tag {
-            position: absolute; bottom: 3px; right: 5px; color: #fff9c4; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3); font-size: 7px;
-            pointer-events: none; text-transform: lowercase; font-weight: 500;
+        /* Estilo Bravo Hamburgueria */
+        .bravo-card {
+            background: linear-gradient(145deg, #211b18 0%, #151515 72%);
+            border: 1px solid #392726;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
-        /* Estilos do Painel Admin */
-        .admin-card-open { background-color: #dcfce7; border-color: #22c55e; }
-        .admin-card-closed { background-color: #fee2e2; border-color: #ef4444; }
-        
-        .btn-status-off { background-color: #e2e8f0; color: #64748b; border: 2px solid #cbd5e1; }
-        .btn-status-open-on { background-color: #22c55e; color: white; border: 2px solid #16a34a; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); }
-        .btn-status-closed-on { background-color: #ef4444; color: white; border: 2px solid #dc2626; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
+        .bravo-card:hover {
+            border-color: var(--brand-gold);
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(246, 166, 9, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .bravo-img-container {
+            width: 100%;
+            height: 205px;
+            overflow: hidden;
+            position: relative;
+            background: #100f0e;
+        }
+
+        .bravo-img-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 52%, rgba(0, 0, 0, 0.46));
+            pointer-events: none;
+        }
+
+        .bravo-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .bravo-card:hover .bravo-img-container img {
+            transform: scale(1.05);
+        }
+
+        .category-bebidas .bravo-img-container img {
+            object-fit: contain;
+            padding: 6px;
+        }
+
+        .category-bebidas .bravo-img-container {
+            height: 245px;
+        }
+
+        .category-bebidas .product-card-13 .bravo-img-container img {
+            transform: scale(1.45);
+        }
+
+        .category-bebidas .product-card-13:hover .bravo-img-container img {
+            transform: scale(1.55);
+        }
+
+        .hero-banner {
+            background-image: linear-gradient(90deg, rgba(13, 13, 13, 0.94) 12%, rgba(13, 13, 13, 0.62) 54%, rgba(13, 13, 13, 0.5)), url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=85&w=1600');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-title { font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.01em; text-shadow: 0 4px 22px rgba(0, 0, 0, 0.5); }
+
+        .category-heading {
+            border-color: var(--brand-red);
+            background: linear-gradient(90deg, rgba(226, 27, 35, 0.18), transparent);
+        }
+
+        .price-tag { color: var(--brand-gold); font-family: 'Barlow Condensed', sans-serif; font-size: 1.35rem; }
+
+        .add-button { background: var(--brand-gold); box-shadow: 0 7px 16px rgba(246, 166, 9, 0.18); }
+        .add-button:hover { background: #ffc247; box-shadow: 0 9px 20px rgba(246, 166, 9, 0.32); transform: translateY(-1px); }
+
+        .category-heading, .bravo-card, .hero-banner { animation: rise-in 0.55s ease both; }
+        @keyframes rise-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .cat-tab.active {
+            color: var(--brand-gold);
+            border-bottom: 3px solid var(--brand-red);
+        }
+
+        .cart-badge { 
+            position: absolute; 
+            top: -4px; 
+            right: -4px; 
+            background: var(--brand-red); 
+            color: #ffffff; 
+            border-radius: 9999px; 
+            padding: 2px 6px; 
+            font-size: 10px; 
+            font-weight: 800; 
+        }
+
+        .method-btn.active { 
+            background-color: var(--brand-gold); 
+            color: #000000; 
+            font-weight: 800;
+        }
+
+        .btn-status-off { background-color: #262626; color: #a3a3a3; }
+        .btn-status-open-on { background-color: #22c55e; color: white; }
+        .btn-status-closed-on { background-color: #ef4444; color: white; }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="pb-24 antialiased">
 
-    <nav class="bg-white shadow-sm sticky top-0 z-50 border-b-4 border-yellow-500">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white shadow-lg">
+    <!-- Topo / Header Bravo Style -->
+    <header class="bg-[#121212]/95 sticky top-0 z-50 border-b border-amber-500/20 backdrop-blur-md">
+        <div class="container mx-auto max-w-6xl px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 bg-amber-500 rounded-2xl rotate-3 flex items-center justify-center text-black font-black text-xl shadow-lg shadow-amber-500/30">
                     <i class="fas fa-crown"></i>
                 </div>
-                <h1 class="text-xl font-black text-gray-900 uppercase tracking-tighter">Rei da <span class="text-yellow-500">Chapa</span></h1>
+                <div>
+                    <h1 class="text-lg font-black uppercase tracking-wider text-white">REI DA <span class="text-amber-500">CHAPA</span></h1>
+                    <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest flex items-center gap-1.5">
+                        <span id="status-loja-dot" class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                        <span>Aberto hoje</span><span class="text-neutral-600">•</span><span id="display-horario">18:00 às 22:30</span>
+                    </p>
+                </div>
             </div>
-            <button onclick="toggleCart()" class="relative p-2 bg-gray-100 rounded-xl text-gray-800 hover:bg-yellow-100 transition-colors">
-                <i class="fas fa-shopping-basket text-xl"></i>
+
+            <button onclick="toggleCart()" class="relative p-3.5 bg-amber-500 hover:bg-amber-400 text-black rounded-2xl transition-colors shadow-lg shadow-amber-500/20">
+                <i class="fas fa-shopping-bag text-base"></i><span class="hidden sm:inline ml-2 text-xs font-black uppercase">Sacola</span>
                 <span id="cart-count" class="cart-badge hidden">0</span>
             </button>
         </div>
-    </nav>
 
-    <header class="primary-gradient text-white py-8 px-4 text-center relative overflow-hidden">
-        <div class="relative z-10">
-            <h2 class="text-3xl font-black mb-1 drop-shadow-lg italic uppercase">Rei da Chapa</h2>
-            <p class="text-[10px] font-bold bg-black/20 inline-block px-3 py-1 rounded-full uppercase tracking-widest">O Sabor que manda!</p>
+        <!-- Abas de Categoria com Scroll Horizontal -->
+        <div class="flex overflow-x-auto px-4 gap-7 no-scrollbar border-t border-neutral-800 bg-[#121212]">
+            <button id="btn-Combos" onclick="filterCategory('Combos')" class="cat-tab py-3 text-xs font-black uppercase tracking-widest text-neutral-400 border-b-3 border-transparent whitespace-nowrap transition-all">Combos</button>
+            <button id="btn-Sanduiches" onclick="filterCategory('Sanduiches')" class="cat-tab active py-3 text-xs font-black uppercase tracking-widest text-amber-500 border-b-3 border-amber-500 whitespace-nowrap transition-all">Sanduíches</button>
+            <button id="btn-Artesanais" onclick="filterCategory('Artesanais')" class="cat-tab py-3 text-xs font-black uppercase tracking-widest text-neutral-400 border-b-3 border-transparent whitespace-nowrap transition-all">Artesanais</button>
+            <button id="btn-Bebidas" onclick="filterCategory('Bebidas')" class="cat-tab py-3 text-xs font-black uppercase tracking-widest text-neutral-400 border-b-3 border-transparent whitespace-nowrap transition-all">Bebidas</button>
         </div>
-        <i class="fas fa-fire absolute -right-10 -bottom-10 text-[140px] text-white/10 rotate-12"></i>
     </header>
 
-    <div class="container mx-auto px-4 mt-4">
-        <div class="bg-white rounded-2xl p-4 shadow-sm border-l-4 border-yellow-500 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="text-yellow-600 bg-yellow-100 p-2 rounded-lg"><i class="fas fa-clock"></i></div>
-                <div>
-                    <h4 class="text-[10px] font-black uppercase text-gray-900">Atendimento</h4>
-                    <p class="text-[9px] font-bold text-gray-500 uppercase">Entrega / Retirada</p>
+    <!-- Banner Hero -->
+    <section class="hero-banner relative border-b border-amber-500/20 py-14 sm:py-20 px-4 overflow-hidden">
+        <div class="relative z-10 max-w-6xl mx-auto">
+            <div class="max-w-xl text-left">
+                <span class="inline-flex items-center gap-2 bg-amber-500 text-black text-[10px] font-black uppercase px-3 py-1.5 rounded-full tracking-widest"><i class="fas fa-fire"></i> Feito na chapa, servido quente</span>
+                <h2 class="hero-title text-5xl sm:text-7xl font-black uppercase italic text-white mt-4 leading-[0.9]">O sabor que<br><span class="text-amber-400">manda.</span></h2>
+                <p class="text-sm sm:text-base text-neutral-200 mt-4 max-w-md font-medium leading-relaxed">Hambúrguer de verdade, ingredientes caprichados e aquele sabor que chega chegando.</p>
+                <div class="flex flex-wrap gap-3 mt-7">
+                    <button onclick="filterCategory('Combos')" class="bg-amber-500 hover:bg-amber-400 text-black px-5 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-lg shadow-amber-500/20"><i class="fas fa-crown mr-2"></i>Ver combos</button>
+                    <button onclick="filterCategory('Artesanais')" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-5 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all">Artesanais</button>
                 </div>
             </div>
-            <div class="text-right">
-                <span id="status-loja" class="text-[10px] font-black px-2 py-1 rounded-md uppercase italic">Verificando...</span>
-                <p id="display-horario" class="text-xs font-black text-gray-800 mt-1">18:00 às 22:30</p>
+        </div>
+    </section>
+
+    <!-- Lista de Produtos -->
+    <main class="container mx-auto max-w-6xl px-4 py-8">
+        <div class="flex items-end justify-between gap-4 mb-5">
+            <div>
+                <p class="text-[10px] font-black uppercase tracking-[0.25em] text-red-400 mb-2">Escolha seu próximo pedido</p>
+                <h2 id="category-title" class="category-heading text-2xl font-black uppercase tracking-wide text-white border-l-4 pl-3 py-1">Sanduíches</h2>
             </div>
+            <span class="hidden sm:block text-[10px] font-bold uppercase tracking-widest text-neutral-500">Produção artesanal</span>
         </div>
-    </div>
-
-    <div class="sticky top-[68px] bg-white/90 backdrop-blur-md z-40 py-3 shadow-sm mt-4">
-        <div class="flex overflow-x-auto px-4 gap-2 no-scrollbar">
-            <button id="btn-Combos" onclick="filterCategory('Combos')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap">Combos </button>
-            <button id="btn-Sanduiches" onclick="filterCategory('Sanduiches')" class="cat-btn bg-yellow-500 text-white px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-md">Sanduíches</button>
-            <button id="btn-Artesanais" onclick="filterCategory('Artesanais')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap">Artesanais</button>
-            <button id="btn-Bebidas" onclick="filterCategory('Bebidas')" class="cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap">Bebidas</button>
-        </div>
-    </div>
-
-    <main class="container mx-auto px-4 py-4 mb-20">
-        <div id="products-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        <div id="products-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
     </main>
 
-    <div id="admin-modal" class="fixed inset-0 bg-black/80 z-[200] hidden flex items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl">
-            <div class="p-5 bg-gray-900 text-white flex justify-between items-center">
-                <h3 class="font-black uppercase text-sm italic tracking-widest"><i class="fas fa-user-shield mr-2 text-yellow-500"></i> Painel Admin</h3>
-                <button onclick="closeAdmin()"><i class="fas fa-times"></i></button>
+    <!-- Barra de Sacola Fixa (Mobile) -->
+    <div id="bottom-cart-bar" class="fixed bottom-0 left-0 right-0 bg-[#121212]/95 backdrop-blur-md border-t border-neutral-800 p-3 z-40 hidden">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <p class="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Total do Pedido</p>
+                <p id="bottom-cart-total" class="text-base font-black text-amber-500">R$ 0,00</p>
             </div>
-            <div id="admin-container" class="p-6 space-y-6">
-                <div class="grid grid-cols-2 gap-4">
-                    <button id="admin-btn-aberto" onclick="setAdminStatus('aberto')" class="py-4 rounded-2xl font-black uppercase text-sm flex flex-col items-center gap-1 transition-all">Aberto</button>
-                    <button id="admin-btn-fechado" onclick="setAdminStatus('fechado')" class="py-4 rounded-2xl font-black uppercase text-sm flex flex-col items-center gap-1 transition-all">Fechado</button>
-                </div>
-                <input type="text" id="admin-input-horario" class="w-full border-2 rounded-xl p-3 text-sm font-bold" placeholder="Ex: 18:00 às 23:00">
-                <button onclick="saveAdminChanges()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black uppercase">Confirmar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="options-modal" class="fixed inset-0 bg-black/70 z-[100] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden flex flex-col max-h-[85vh] relative">
-            <div id="modal-header" class="p-5 bg-yellow-500 text-white font-black uppercase italic flex justify-between items-center">
-                <span id="modal-title" class="text-sm">Personalizar</span>
-                <button onclick="closeOptions()"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="p-6 space-y-3 overflow-y-auto pb-24" id="options-container"></div>
-            <div class="absolute bottom-6 left-0 w-full px-6">
-                <button id="confirm-addons" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black uppercase shadow-xl">Confirmar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[400px] bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 flex flex-col">
-        <div class="p-6 bg-gray-900 text-white flex justify-between items-center">
-            <h2 class="text-lg font-black italic uppercase text-yellow-500">Seu Pedido</h2>
-            <button onclick="toggleCart()" class="text-white text-2xl"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="flex-grow overflow-y-auto p-4 space-y-4 bg-gray-50">
-            <div id="cart-items" class="space-y-2"></div>
-            <div class="bg-white p-4 rounded-2xl shadow-sm border space-y-3">
-                <div class="flex gap-2 p-1 bg-gray-100 rounded-xl">
-                    <button id="btn-delivery" onclick="setMethod('Entrega')" class="method-btn active flex-1 py-2 rounded-lg font-bold text-[10px]">ENTREGA</button>
-                    <button id="btn-pickup" onclick="setMethod('Retirada')" class="method-btn flex-1 py-2 rounded-lg font-bold text-[10px]">RETIRADA</button>
-                </div>
-                <input type="text" id="cust-name" placeholder="Seu Nome" class="w-full bg-gray-100 rounded-xl p-3 text-sm">
-                <div id="address-box"><textarea id="cust-address" placeholder="Endereço Completo" class="w-full bg-gray-100 rounded-xl p-3 text-sm h-20"></textarea></div>
-                <select id="cust-payment" class="w-full bg-gray-100 rounded-xl p-3 text-sm">
-                    <option value="Pix">Pix</option>
-                    <option value="Cartão">Cartão</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                </select>
-            </div>
-        </div>
-        <div class="p-6 border-t bg-white">
-            <div class="flex justify-between items-center mb-4">
-                <span class="text-gray-500 font-bold uppercase text-[10px]">Total</span>
-                <span id="cart-total" class="text-2xl font-black text-orange-600">R$ 0,00</span>
-            </div>
-            <button onclick="sendOrder()" class="w-full primary-gradient text-white py-4 rounded-2xl font-black uppercase shadow-xl flex items-center justify-center gap-3">
-                <i class="fab fa-whatsapp text-xl"></i> Finalizar Pedido
+            <button onclick="toggleCart()" class="bg-amber-500 hover:bg-amber-400 text-black px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-colors">
+                <span>Ver Sacola</span>
+                <i class="fas fa-chevron-right text-[10px]"></i>
             </button>
         </div>
     </div>
 
-    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55] hidden"></div>
+    <!-- Modal Admin -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 z-[200] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-neutral-900 border border-neutral-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
+            <div class="p-4 bg-neutral-950 text-white flex justify-between items-center border-b border-neutral-800">
+                <h3 class="font-black text-xs uppercase tracking-wider text-amber-500"><i class="fas fa-cog mr-1"></i> Painel da Loja</h3>
+                <button onclick="closeAdmin()"><i class="fas fa-times text-neutral-400"></i></button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="admin-btn-aberto" onclick="setAdminStatus('aberto')" class="py-3 rounded-xl font-black text-xs uppercase">Aberto</button>
+                    <button id="admin-btn-fechado" onclick="setAdminStatus('fechado')" class="py-3 rounded-xl font-black text-xs uppercase">Fechado</button>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-neutral-400 uppercase mb-1">Horário de Atendimento</label>
+                    <input type="text" id="admin-input-horario" class="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-amber-500" placeholder="Ex: 18:00 às 22:30">
+                </div>
+                <button onclick="saveAdminChanges()" class="w-full bg-amber-500 text-black py-3 rounded-xl font-black text-xs uppercase tracking-wider">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        const WHATSAPP_NUMBER = "61999179675";
-        const ADMIN_PASS = "Fazenda51@"; 
+    <!-- Modal Adicionais / Opções -->
+    <div id="options-modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-end sm:items-center justify-center p-0 sm:p-4 backdrop-blur-sm">
+        <div class="bg-neutral-900 border border-neutral-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] relative shadow-2xl">
+            <div class="p-4 bg-neutral-950 border-b border-neutral-800 flex justify-between items-center">
+                <div>
+                    <h3 id="modal-product-name" class="font-black text-sm uppercase text-white">Personalizar Item</h3>
+                    <p id="modal-title" class="text-[10px] font-bold uppercase tracking-wider text-amber-500">Escolha os adicionais</p>
+                </div>
+                <button onclick="closeOptions()" class="w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 flex items-center justify-center"><i class="fas fa-times text-xs"></i></button>
+            </div>
+            <div class="p-4 space-y-2 overflow-y-auto pb-24" id="options-container"></div>
+            <div class="absolute bottom-0 left-0 w-full p-3 bg-neutral-950 border-t border-neutral-800">
+                <button id="confirm-addons" class="w-full bg-amber-500 text-black py-3.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-lg hover:bg-amber-400 transition-colors">Adicionar ao Pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sacola / Carrinho Lateral -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[400px] bg-neutral-900 border-l border-neutral-800 shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-4 bg-neutral-950 border-b border-neutral-800 flex justify-between items-center">
+            <h2 class="text-sm font-black uppercase tracking-wider text-amber-500 flex items-center gap-2">
+                <i class="fas fa-shopping-bag"></i> Sua Sacola
+            </h2>
+            <button onclick="toggleCart()" class="text-neutral-400 hover:text-white"><i class="fas fa-times text-lg"></i></button>
+        </div>
         
-        let orderMethod = "Entrega";
-        let cart = [];
-        let currentCategory = 'Sanduiches';
-        let tempAdminStatus = 'aberto';
-
-        const addonsList = [
-            { name: "Cheddar", price: 3.00 },
-            { name: "Catupiry", price: 3.00 },
-            { name: "Bacon", price: 3.00 },
-            { name: "Hambúrguer", price: 3.00 }
-        ];
-
-        const products = [
-            // CATEGORIA: COMBOS
-            { id: 101, name: "Combo Real", price: 25.00, desc: "1 Rei Clássico + Batata 150g + Refri Lata.", category: "Combos", img: "https://alloydeliveryimages.s3.sa-east-1.amazonaws.com/item_images/11144/6699988053fa9n5n3n.webp", hasAddons: true },
-            { id: 102, name: "Combo Imperial", price: 29.00, desc: "1 Bacon Imperial + Batata 150g + Refri Lata.", category: "Combos", img: "https://imagens.jotaja.com/empresa/6bca4fb7-de4c-4b29-a3f3-a8f46e77c8ee.jpg", hasAddons: true },
-            { id: 103, name: "Banquete do Rei (2 Pessoas)", price: 75.00, desc: "2 Soberano Artesanal + 1 Batata 150g + 1 Coca-Cola 1.5L.", category: "Combos", img: "https://imagens.nivel.com.br/wwwroot/repositorioImagens/niveldelivery/6463/6463_product_8b00f91ca4b249988907332b88bdbe5d.jpg?_id=37bac8646212418d995c04834b6af9b4", hasAddons: true },
-
-            // CATEGORIA: SANDUÍCHES
-            { id: 1, name: "Príncipe da Chapa", price: 13.00, desc: "Hambúrguer, Presunto e Queijo.", category: "Sanduiches", img: "https://www.estadao.com.br/resizer/aQ0_ezgaRvEwF__UfwM-NAkqAsc=/720x503/filters:format(jpg):quality(80):focal(540x315:550x325)/cloudfront-us-east-1.images.arcpublishing.com/estadao/77XTHHCCLBEXLC2Y5RK4PN37CE.jpg", hasAddons: true },
-            { id: 2, name: "Rei Clássico", price: 15.00, desc: "Hambúrguer, presunto, Queijo, Alface, Tomate e Ovo.", category: "Sanduiches", img: "https://img.freepik.com/fotos-premium/hamburguer-delicioso-em-fundo-de-madeira-hamburguer-com-carne-de-alface-tomate-e-queijo_433165-4.jpg", hasAddons: true },
-            { id: 3, name: "Bacon Imperial", price: 18.00, desc: "Hambúrguer, Presunto, Queijo, Ovo, Milho, Alface, Tomate e Bacon.", category: "Sanduiches", img: "https://static.wixstatic.com/media/114454_758f742acd454b6abe9c56faa1eb618a~mv2.jpg/v1/fill/w_980,h_756,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/114454_758f742acd454b6abe9c56faa1eb618a~mv2.jpg", hasAddons: true },
-            { id: 4, name: "Imperial Chicken", price: 21.00, desc: "Filé de frango, Presunto, Queijo, Milho, Ovo, Alface e Tomate.", category: "Sanduiches", img: "https://revistamenu.com.br/wp-content/uploads/sites/24/2024/06/grand-chicken.jpg", hasAddons: true },
-            { id: 5, name: "Duelo Real", price: 23.00, desc: "Hambúrguer, Filé de frango, Presunto, Queijo, Bacon, Ovo, Alface e Tomate.", category: "Sanduiches", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=500", hasAddons: true },
-            { id: 6, name: "Imperador Mignon", price: 34.00, desc: "Filé mignon, Presunto, Queijo, Milho, Ovo, Alface, Tomate.", category: "Sanduiches", img: "https://images.unsplash.com/photo-1521305916504-4a1121188589?q=80&w=500", hasAddons: true },
+        <div class="flex-grow overflow-y-auto p-4 space-y-4 bg-neutral-900">
+            <div id="cart-items" class="space-y-2"></div>
             
-            // CATEGORIA: ARTESANAIS
-            { id: 16, name: "Rei Bacana", price: 35.00, desc: "Pão, Alface, Hambúrguer Artesanal, Bacon, Ovo, Presunto, Mussarela, Tomate e Pickles.", category: "Artesanais", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=500", hasAddons: true },
-            { id: 7, name: "Rei Insano", price: 27.00, desc: "Hambúrguer Artesanal, Filé de frango, Calabresa, Bacon, Presunto, Queijo, Ovo, Batata, Milho, Alface e Tomate.", category: "Artesanais", img: "https://tse4.mm.bing.net/th/id/OIP.0kbGCSI19_hbJBNLmOWN1gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", hasAddons: true },
-            { id: 8, name: "Soberano Artesanal", price: 32.00, desc: "Dois hambúrgueres artesanais, Presunto, Queijo, Milho, Ovo, Batata, Alface, Tomate e Bacon.", category: "Artesanais", img: "https://tse3.mm.bing.net/th/id/OIP._ukZ8NYAT2Js62cjAzqawgHaGh?rs=1&pid=ImgDetMain&o=7&rm=3", hasAddons: true },
-            { id: 9, name: "Rei dos Reis", price: 37.00, desc: "2 Hambúrgueres Artesanais, Filé de frango, 2 Ovos, Calabresa, Bacon, Presunto, Queijo, Alface e Tomate.", category: "Artesanais", img: "https://imagens.jotaja.com/produtos/d4a28843-7b32-4f40-bce6-c491f8851421.jpg", hasAddons: true },
-            { id: 17, name: "Batata Média", price: 7.00, desc: "Porção individual de batatas crocantes (aprox. 150g).", category: "Artesanais", img: "https://cdn.awsli.com.br/2500x2500/2757/2757108/produto/384467320/49-gckgieaxow.png", hasAddons: true },
+            <div class="bg-neutral-950 p-4 rounded-2xl border border-neutral-800 space-y-3">
+                <div class="flex gap-2 p-1 bg-neutral-900 rounded-xl">
+                    <button id="btn-delivery" onclick="setMethod('Entrega')" class="method-btn active flex-1 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider">Entrega</button>
+                    <button id="btn-pickup" onclick="setMethod('Retirada')" class="method-btn flex-1 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider text-neutral-400">Retirada</button>
+                </div>
+                <input type="text" id="cust-name" placeholder="Seu Nome" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs font-medium text-white focus:border-amber-500 outline-none">
+                <div id="address-box">
+                    <textarea id="cust-address" placeholder="Endereço Completo (Rua, Número, Bairro)" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs font-medium text-white h-20 focus:border-amber-500 outline-none"></textarea>
+                </div>
+                <select id="cust-payment" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs font-bold text-white outline-none">
+                    <option value="Pix">Pagamento via Pix</option>
+                    <option value="Cartão">Cartão de Crédito / Débito</option>
+                    <option value="Dinheiro">Dinheiro na entrega</option>
+                </select>
+                <div id="change-box" class="hidden">
+                    <label for="cust-change" class="block text-[10px] font-bold text-neutral-400 uppercase mb-1">Troco para quanto?</label>
+                    <input type="number" id="cust-change" min="0" step="0.01" placeholder="Ex: 50,00" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl p-3 text-xs font-bold text-white focus:border-amber-500 outline-none">
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 border-t border-neutral-800 bg-neutral-950">
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Total</span>
+                <span id="cart-total" class="text-xl font-black text-amber-500">R$ 0,00</span>
+            </div>
+            <button onclick="sendOrder()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-colors">
+                <i class="fab fa-whatsapp text-lg"></i> Enviar Pedido no WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-[55] hidden"></div>
+
+  <script>
+    const WHATSAPP_NUMBER = "61999179675";
+    const ADMIN_PASS = "Fazenda51@"; 
+    
+    let orderMethod = "Entrega";
+    let cart = [];
+    let currentCategory = 'Sanduiches';
+    let tempAdminStatus = 'aberto';
+
+    const addonsList = [
+        { name: "Cheddar", price: 3.00 },
+        { name: "Catupiry", price: 3.00 },
+        { name: "Bacon Extra", price: 3.00 },
+        { name: "Hambúrguer Extra", price: 3.00 }
+    ];
+
+    const products = [
+        // COMBOS
+        { id: 101, name: "Combo Real", price: 25.00, desc: "1 Rei Clássico + Batata 150g + Refri Lata.", category: "Combos", img: "https://alloydeliveryimages.s3.sa-east-1.amazonaws.com/item_images/11144/6699988053fa9n5n3n.webp", hasAddons: true },
+        { id: 102, name: "Combo Imperial", price: 29.00, desc: "1 Bacon Imperial + Batata 150g + Refri Lata.", category: "Combos", img: "https://static.wixstatic.com/media/114454_758f742acd454b6abe9c56faa1eb618a~mv2.jpg/v1/fill/w_980,h_756,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/114454_758f742acd454b6abe9c56faa1eb618a~mv2.jpg", hasAddons: true },
+        { id: 103, name: "Banquete do Rei (2 Pessoas)", price: 75.00, desc: "2 Soberano Artesanal + 1 Batata 150g + 1 Coca-Cola 1.5L.", category: "Combos", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=800", hasAddons: true },
+
+        // SANDUÍCHES
+        { id: 1, name: "Príncipe da Chapa", price: 13.00, desc: "Hambúrguer, Presunto e Queijo.", category: "Sanduiches", img: "https://www.estadao.com.br/resizer/aQ0_ezgaRvEwF__UfwM-NAkqAsc=/720x503/filters:format(jpg):quality(80):focal(540x315:550x325)/cloudfront-us-east-1.images.arcpublishing.com/estadao/77XTHHCCLBEXLC2Y5RK4PN37CE.jpg", hasAddons: true },
+        { id: 2, name: "Rei Clássico", price: 15.00, desc: "Hambúrguer, presunto, Queijo, Alface, Tomate e Ovo.", category: "Sanduiches", img: "https://img.freepik.com/fotos-premium/hamburguer-delicioso-em-fundo-de-madeira-hamburguer-com-carne-de-alface-tomate-e-queijo_433165-4.jpg", hasAddons: true },
+        { id: 3, name: "Bacon Imperial", price: 18.00, desc: "Hambúrguer, Presunto, Queijo, Ovo, Milho, Alface, Tomate e Bacon.", category: "Sanduiches", img: "https://static.wixstatic.com/media/114454_758f742acd454b6abe9c56faa1eb618a~mv2.jpg/v1/fill/w_980,h_756,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/114454_758f742acd454b6abe9c56faa1eb618a~mv2.jpg", hasAddons: true },
+        { id: 4, name: "Imperial Chicken", price: 21.00, desc: "Filé de frango, Presunto, Queijo, Milho, Ovo, Alface e Tomate.", category: "Sanduiches", img: "https://revistamenu.com.br/wp-content/uploads/sites/24/2024/06/grand-chicken.jpg", hasAddons: true },
+        { id: 5, name: "Duelo Real", price: 23.00, desc: "Hambúrguer, Filé de frango, Presunto, Queijo, Bacon, Ovo, Alface e Tomate.", category: "Sanduiches", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx6cHimeq4hpEKp4cG9-W5ilv8OlTL29LpndjnkyvKsYpPoUugNo142XvF&s=10", hasAddons: true },
+        { id: 6, name: "Imperador Mignon", price: 34.00, desc: "Filé mignon, Presunto, Queijo, Milho, Ovo, Alface, Tomate.", category: "Sanduiches", img: "https://instadelivery-public.nyc3.cdn.digitaloceanspaces.com/itens/177578842569d8618945f79_75_75.jpeg", hasAddons: true },
+        
+        // ARTESANAIS
+        { id: 16, name: "Rei Bacana", price: 35.00, desc: "Pão, Alface, Hambúrguer Artesanal, Bacon, Ovo, Presunto, Mussarela, Tomate e Pickles.", category: "Artesanais", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=500", hasAddons: true },
+        { id: 7, name: "Rei Insano", price: 27.00, desc: "Hambúrguer Artesanal, Filé de frango, Calabresa, Bacon, Presunto, Queijo, Ovo, Batata, Milho, Alface e Tomate.", category: "Artesanais", img: "https://imagens.jotaja.com/produtos/3c224dd9-4586-496b-9916-7245603d2ccc.jpg", hasAddons: true },
+        { id: 8, name: "Soberano Artesanal", price: 32.00, desc: "Dois hambúrgueres artesanais, Presunto, Queijo, Milho, Ovo, Batata, Alface, Tomate e Bacon.", category: "Artesanais", img: "https://tse3.mm.bing.net/th/id/OIP._ukZ8NYAT2Js62cjAzqawgHaGh?rs=1&pid=ImgDetMain&o=7&rm=3", hasAddons: true },
+        { id: 9, name: "Rei dos Reis", price: 37.00, desc: "2 Hambúrgueres Artesanais, Filé de frango, 2 Ovos, Calabresa, Bacon, Presunto, Queijo, Alface e Tomate.", category: "Artesanais", img: "https://imagens.jotaja.com/produtos/d4a28843-7b32-4f40-bce6-c491f8851421.jpg", hasAddons: true },
+        { id: 17, name: "Batata Média", price: 7.00, desc: "Porção individual de batatas crocantes (aprox. 150g).", category: "Artesanais", img: "https://cdn.awsli.com.br/2500x2500/2757/2757108/produto/384467320/49-gckgieaxow.png", hasAddons: true },
+        
+        // BEBIDAS
+        { id: 10, name: "Cerveja lata", price: 4.50, desc: "Skol, Brahma ou Antarctica.", category: "Bebidas", img: "https://amazonasatual.com.br/wp-content/uploads/2021/12/Cervejas-em-lata-Divulgacao-800x530.jpg", options: ["Skol", "Brahma", "Antarctica"] },
+        { id: 11, name: "Refrigerante lata", price: 4.50, desc: "Coca, Guaraná ou Fanta.", category: "Bebidas", img: "https://lanchonautas.com.br/wp-content/uploads/2022/05/refrilata-1.png", options: ["Coca-Cola", "Guaraná", "Fanta"] },
+        { id: 13, name: "Coca Cola 1,5L", price: 10.50, desc: "Garrafa gelada.", category: "Bebidas", img: "https://tdc0wy.vteximg.com.br/arquivos/ids/159102-1000-1000/REFRIGERANTE-COCA-COLA-PET-15L-ORIGINAL.png?v=638121787162800000" },
+        { id: 12, name: "Suco Maracujá", price: 10.70, desc: "Del Valle 1 Litro.", category: "Bebidas", img: "https://www.bernardaoemcasa.com.br/media/catalog/product/cache/1/image/500x500/9df78eab33525d08d6e5fb8d27136e95/3/d/3d_front_view_v1_del_valle_nectar_maracuja_tetrabrik_1000ml_1573_mainline_seca.png" },
+        { id: 14, name: "Suco Pêssego", price: 10.70, desc: "Del Valle 1 Litro.", category: "Bebidas", img: "https://andinacocacola.vtexassets.com/arquivos/ids/158633/Del-Valle-Nectar-Pessego-1L-114574_COCA_1.jpg?v=638737531930400000" },
+        { id: 15, name: "Suco Uva", price: 10.70, desc: "Del Valle 1 Litro.", category: "Bebidas", img: "https://mercantilnovaera.vtexassets.com/arquivos/ids/220480-1200-auto?v=638798909754400000&width=1200&height=auto&aspect=true" }
+    ];
+
+    function renderProducts() {
+        const grid = document.getElementById('products-list');
+        grid.className = `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 category-${currentCategory.toLowerCase()}`;
+        const items = products.filter(p => p.category === currentCategory);
+
+        grid.innerHTML = items.map(p => `
+            <div class="bravo-card product-card-${p.id} flex flex-col justify-between">
+                <div>
+                    <div class="bravo-img-container">
+                        <img src="${p.img}" alt="${p.name}" loading="lazy">
+                        <span class="absolute left-3 top-3 z-10 bg-black/75 text-amber-300 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider">${p.id === 2 ? 'Mais pedido' : p.category === 'Bebidas' ? 'Gelada' : 'Na chapa'}</span>
+                    </div>
+                    <div class="p-5 pb-4">
+                        <h3 class="font-black text-lg text-white uppercase tracking-wide mb-1">${p.name}</h3>
+                        <p class="text-neutral-400 text-[11px] leading-relaxed">${p.desc}</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-4 flex items-center justify-between border-t border-white/10 mt-auto">
+                    <div><span class="block text-[9px] text-neutral-500 font-bold uppercase tracking-widest">A partir de</span><span class="price-tag font-black">R$ ${p.price.toFixed(2).replace('.', ',')}</span></div>
+                    <button onclick="openProductLogic(${p.id})" class="add-button text-black px-4 py-2.5 rounded-xl font-black text-[11px] uppercase tracking-wider transition-all">
+                        <i class="fas fa-plus mr-1"></i> Adicionar
+                    </button>
+                </div>
+            </div>`).join('');
+    }
+
+    function filterCategory(cat) {
+        currentCategory = cat;
+        document.getElementById('category-title').innerText = cat;
+        document.querySelectorAll('.cat-tab').forEach(btn => {
+            const isSelected = btn.id === `btn-${cat}`;
+            btn.className = isSelected 
+                ? "cat-tab active py-3 text-xs font-black uppercase tracking-widest text-amber-500 border-b-3 border-amber-500 whitespace-nowrap transition-all" 
+                : "cat-tab py-3 text-xs font-black uppercase tracking-widest text-neutral-400 border-b-3 border-transparent whitespace-nowrap transition-all";
+        });
+        renderProducts();
+    }
+
+    function openProductLogic(pid) {
+        const p = products.find(x => x.id === pid);
+        const container = document.getElementById('options-container');
+        const confirmBtn = document.getElementById('confirm-addons');
+        
+        document.getElementById('modal-product-name').innerText = p.name;
+        confirmBtn.classList.remove('hidden');
+
+        if (p.hasAddons) {
+            document.getElementById('modal-title').innerText = "Escolha seus adicionais";
+            container.innerHTML = addonsList.map(a => `
+                <label class="flex justify-between items-center p-3 bg-neutral-950 rounded-xl cursor-pointer border border-neutral-800 hover:border-amber-500/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" class="w-4 h-4 rounded text-amber-500 accent-amber-500" onchange="toggleAddon('${a.name}', ${a.price})">
+                        <span class="text-xs font-bold text-neutral-200">${a.name}</span>
+                    </div>
+                    <span class="text-xs font-black text-amber-500">+ R$ ${a.price.toFixed(2).replace('.', ',')}</span>
+                </label>`).join('');
             
-            // CATEGORIA: BEBIDAS
-            { id: 10, name: "Cerveja lata", price: 4.50, desc: "Skol, Brahma ou Antarctica.", category: "Bebidas", img: "https://amazonasatual.com.br/wp-content/uploads/2021/12/Cervejas-em-lata-Divulgacao-800x530.jpg", options: ["Skol", "Brahma", "Antarctica"] },
-            { id: 11, name: "Refrigerante lata", price: 4.50, desc: "Coca, Guaraná ou Fanta.", category: "Bebidas", img: "https://lanchonautas.com.br/wp-content/uploads/2022/05/refrilata-1.png", options: ["Coca-Cola", "Guaraná", "Fanta"] },
-            { id: 13, name: "Coca Cola 1,5L", price: 10.50, desc: "Garrafa gelada.", category: "Bebidas", img: "https://tdc0wy.vteximg.com.br/arquivos/ids/159102-1000-1000/REFRIGERANTE-COCA-COLA-PET-15L-ORIGINAL.png?v=638121787162800000" },
-            { id: 12, name: "Suco Maracujá", price: 10.70, desc: "Del Valle 1 Litro.", category: "Bebidas", img: "https://www.bernardaoemcasa.com.br/media/catalog/product/cache/1/image/500x500/9df78eab33525d08d6e5fb8d27136e95/3/d/3d_front_view_v1_del_valle_nectar_maracuja_tetrabrik_1000ml_1573_mainline_seca.png" },
-            { id: 14, name: "Suco Pêssego", price: 10.70, desc: "Del Valle 1 Litro.", category: "Bebidas", img: "https://andinacocacola.vtexassets.com/arquivos/ids/158633/Del-Valle-Nectar-Pessego-1L-114574_COCA_1.jpg?v=638737531930400000" },
-            { id: 15, name: "Suco Uva", price: 10.70, desc: "Del Valle 1 Litro.", category: "Bebidas", img: "https://mercantilnovaera.vtexassets.com/arquivos/ids/220480-1200-auto?v=638798909754400000&width=1200&height=auto&aspect=true" }
-        ];
-
-        // LÓGICA DO SISTEMA (Renderização, Carrinho, Admin)
-        function renderProducts() {
-            const grid = document.getElementById('products-list');
-            grid.className = `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 category-${currentCategory.toLowerCase()}`;
-            const filtered = products.filter(p => p.category === currentCategory);
-            grid.innerHTML = filtered.map(p => `
-                <div class="product-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full">
-                    <div class="img-container">
-                        <img src="${p.img}">
-                        <span class="ilustrativa-tag">imagem meramente ilustrativa</span>
-                    </div>
-                    <div class="p-4 flex-grow">
-                        <div class="flex justify-between items-start mb-1 gap-2">
-                            <h3 class="font-black text-gray-900 uppercase text-sm leading-tight">${p.name}</h3>
-                            <span class="text-orange-600 font-black text-md whitespace-nowrap">R$ ${p.price.toFixed(2).replace('.', ',')}</span>
-                        </div>
-                        <p class="text-gray-500 text-[10px] leading-tight mb-3">${p.desc}</p>
-                    </div>
-                    <div class="px-4 pb-4 mt-auto">
-                        <button onclick="openProductLogic(${p.id})" class="w-full bg-gray-900 text-white py-2.5 rounded-xl font-black text-[10px] uppercase shadow">+ Adicionar</button>
-                    </div>
-                </div>`).join('');
-        }
-
-        function filterCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                const isSelected = btn.id === `btn-${cat}`;
-                btn.className = isSelected ? "cat-btn bg-yellow-500 text-white px-5 py-2 rounded-full text-xs font-bold shadow-md whitespace-nowrap" : "cat-btn bg-white border border-gray-200 px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap";
-            });
-            renderProducts();
-        }
-
-        function openProductLogic(pid) {
-            const p = products.find(x => x.id === pid);
-            const container = document.getElementById('options-container');
-            const confirmBtn = document.getElementById('confirm-addons');
-            confirmBtn.classList.remove('hidden');
-
-            if (p.hasAddons) {
-                document.getElementById('modal-title').innerText = "Adicionais";
-                container.innerHTML = addonsList.map(a => `
-                    <label class="flex justify-between items-center p-3 bg-gray-50 rounded-xl cursor-pointer mb-1">
-                        <div class="flex items-center gap-2">
-                            <input type="checkbox" class="w-4 h-4 accent-yellow-500" onchange="toggleAddon('${a.name}', ${a.price})">
-                            <span class="text-xs font-bold">${a.name}</span>
-                        </div>
-                        <span class="text-[10px] font-black text-orange-600">+ R$ ${a.price.toFixed(2)}</span>
-                    </label>`).join('');
-                confirmBtn.onclick = () => {
-                    let totalP = p.price + (window.currentAddons || []).reduce((acc, x) => acc + x.price, 0);
-                    let name = p.name + (window.currentAddons?.length ? " (+" + window.currentAddons.map(x=>x.name).join(", ") + ")" : "");
-                    cart.push({...p, name, price: totalP, cartId: Date.now(), qty: 1});
-                    closeOptions(); updateCart();
-                };
-                document.getElementById('options-modal').classList.remove('hidden');
-            } else if (p.options) {
-                document.getElementById('modal-title').innerText = "Escolha o Sabor";
-                confirmBtn.classList.add('hidden');
-                container.innerHTML = p.options.map(o => `
-                    <button onclick="addWithOption(${p.id}, '${o}')" class="w-full p-4 bg-gray-50 rounded-xl text-left font-bold text-xs flex justify-between mb-1">
-                        ${o} <i class="fas fa-chevron-right text-yellow-500"></i>
-                    </button>`).join('');
-                document.getElementById('options-modal').classList.remove('hidden');
-            } else {
-                cart.push({...p, qty: 1, cartId: Date.now()});
+            confirmBtn.onclick = () => {
+                let totalP = p.price + (window.currentAddons || []).reduce((acc, x) => acc + x.price, 0);
+                let name = p.name + (window.currentAddons?.length ? " (+" + window.currentAddons.map(x=>x.name).join(", ") + ")" : "");
+                cart.push({...p, name, price: totalP, cartId: Date.now(), qty: 1});
+                closeOptions(); 
                 updateCart();
-            }
-        }
-
-        function toggleAddon(n, p) {
-            if(!window.currentAddons) window.currentAddons = [];
-            const i = window.currentAddons.findIndex(a => a.name === n);
-            if (i > -1) window.currentAddons.splice(i, 1); else window.currentAddons.push({name: n, price: p});
-        }
-
-        function addWithOption(pid, opt) {
-            const p = products.find(x => x.id === pid);
-            cart.push({...p, name: `${p.name} [${opt}]`, qty: 1, cartId: Date.now()});
-            closeOptions(); updateCart();
-        }
-
-        function updateCart() {
-            const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
-            const totalP = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-            document.getElementById('cart-count').innerText = totalQty;
-            document.getElementById('cart-count').classList.toggle('hidden', totalQty === 0);
-            document.getElementById('cart-total').innerText = `R$ ${totalP.toFixed(2).replace('.', ',')}`;
-            document.getElementById('cart-items').innerHTML = cart.map(i => `
-                <div class="bg-white p-3 rounded-xl flex items-center justify-between border border-gray-100">
-                    <div class="flex-grow">
-                        <h4 class="text-[9px] font-black uppercase text-gray-800 leading-tight">${i.name}</h4>
-                        <p class="text-orange-600 font-bold text-[9px]">R$ ${i.price.toFixed(2).replace('.', ',')}</p>
-                    </div>
-                    <div class="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
-                        <button onclick="changeQty(${i.cartId}, -1)" class="w-5 h-5 font-bold">-</button>
-                        <span class="text-[10px] font-black w-4 text-center">${i.qty}</span>
-                        <button onclick="changeQty(${i.cartId}, 1)" class="w-5 h-5 font-bold">+</button>
-                    </div>
-                </div>`).join('');
-        }
-
-        function changeQty(id, d) {
-            const i = cart.find(x => x.cartId === id);
-            if (i) { i.qty += d; if (i.qty <= 0) cart = cart.filter(x => x.cartId !== id); }
+            };
+            document.getElementById('options-modal').classList.remove('hidden');
+        } else if (p.options) {
+            document.getElementById('modal-title').innerText = "Selecione o sabor";
+            confirmBtn.classList.add('hidden');
+            container.innerHTML = p.options.map(o => `
+                <button onclick="addWithOption(${p.id}, '${o}')" class="w-full p-3 bg-neutral-950 hover:bg-neutral-800 rounded-xl text-left font-bold text-xs text-white flex justify-between items-center border border-neutral-800">
+                    <span>${o}</span>
+                    <i class="fas fa-chevron-right text-amber-500 text-xs"></i>
+                </button>`).join('');
+            document.getElementById('options-modal').classList.remove('hidden');
+        } else {
+            cart.push({...p, qty: 1, cartId: Date.now()});
             updateCart();
         }
+    }
 
-        function closeOptions() { document.getElementById('options-modal').classList.add('hidden'); window.currentAddons = []; }
-        function closeAdmin() { document.getElementById('admin-modal').classList.add('hidden'); }
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
-            document.getElementById('overlay').classList.toggle('hidden');
+    function toggleAddon(n, p) {
+        if(!window.currentAddons) window.currentAddons = [];
+        const i = window.currentAddons.findIndex(a => a.name === n);
+        if (i > -1) window.currentAddons.splice(i, 1); else window.currentAddons.push({name: n, price: p});
+    }
+
+    function addWithOption(pid, opt) {
+        const p = products.find(x => x.id === pid);
+        cart.push({...p, name: `${p.name} [${opt}]`, qty: 1, cartId: Date.now()});
+        closeOptions(); 
+        updateCart();
+    }
+
+    function updateCart() {
+        const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
+        const totalP = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+        
+        document.getElementById('cart-count').innerText = totalQty;
+        document.getElementById('cart-count').classList.toggle('hidden', totalQty === 0);
+        
+        const formattedTotal = `R$ ${totalP.toFixed(2).replace('.', ',')}`;
+        document.getElementById('cart-total').innerText = formattedTotal;
+        document.getElementById('bottom-cart-total').innerText = formattedTotal;
+        
+        document.getElementById('bottom-cart-bar').classList.toggle('hidden', totalQty === 0);
+
+        document.getElementById('cart-items').innerHTML = cart.map(i => `
+            <div class="bg-neutral-950 p-3 rounded-xl flex items-center justify-between border border-neutral-800">
+                <div class="flex-grow pr-2">
+                    <h4 class="text-[11px] font-black uppercase text-white leading-tight">${i.name}</h4>
+                    <p class="text-xs font-black text-amber-500 mt-0.5">R$ ${(i.price * i.qty).toFixed(2).replace('.', ',')}</p>
+                </div>
+                <div class="flex items-center gap-2 bg-neutral-900 rounded-lg p-1 border border-neutral-800">
+                    <button onclick="changeQty(${i.cartId}, -1)" class="w-5 h-5 rounded bg-neutral-800 text-white font-black text-xs flex items-center justify-center">-</button>
+                    <span class="text-xs font-black w-4 text-center text-white">${i.qty}</span>
+                    <button onclick="changeQty(${i.cartId}, 1)" class="w-5 h-5 rounded bg-neutral-800 text-white font-black text-xs flex items-center justify-center">+</button>
+                </div>
+            </div>`).join('');
+    }
+
+    function changeQty(id, d) {
+        const i = cart.find(x => x.cartId === id);
+        if (i) { i.qty += d; if (i.qty <= 0) cart = cart.filter(x => x.cartId !== id); }
+        updateCart();
+    }
+
+    function closeOptions() { document.getElementById('options-modal').classList.add('hidden'); window.currentAddons = []; }
+    function closeAdmin() { document.getElementById('admin-modal').classList.add('hidden'); }
+    
+    function toggleCart() {
+        document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+        document.getElementById('overlay').classList.toggle('hidden');
+    }
+
+    function setMethod(m) {
+        orderMethod = m;
+        document.getElementById('btn-delivery').classList.toggle('active', m === 'Entrega');
+        document.getElementById('btn-pickup').classList.toggle('active', m === 'Retirada');
+        document.getElementById('address-box').style.display = m === 'Entrega' ? 'block' : 'none';
+    }
+
+    function updateChangeField() {
+        const isCash = document.getElementById('cust-payment').value === 'Dinheiro';
+        document.getElementById('change-box').classList.toggle('hidden', !isCash);
+        document.getElementById('cust-change').required = isCash;
+    }
+
+    function sendOrder() {
+        if (localStorage.getItem('rei_status') === 'fechado') { 
+            alert("A loja está fechada no momento!"); 
+            return; 
+        }
+        const name = document.getElementById('cust-name').value;
+        const addr = document.getElementById('cust-address').value;
+        const pay = document.getElementById('cust-payment').value;
+        const change = document.getElementById('cust-change').value;
+        const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+        
+        if(!name || (orderMethod === 'Entrega' && !addr) || cart.length === 0) { 
+            alert("Preencha o nome, endereço e adicione itens ao carrinho!"); 
+            return; 
         }
 
-        function setMethod(m) {
-            orderMethod = m;
-            document.getElementById('btn-delivery').classList.toggle('active', m === 'Entrega');
-            document.getElementById('btn-pickup').classList.toggle('active', m === 'Retirada');
-            document.getElementById('address-box').style.display = m === 'Entrega' ? 'block' : 'none';
+        if (pay === 'Dinheiro' && (!change || Number(change) < total)) {
+            alert(`Informe um valor para troco igual ou maior que R$ ${total.toFixed(2).replace('.', ',')}.`);
+            return;
         }
 
-        function sendOrder() {
-            if (localStorage.getItem('rei_status') === 'fechado') { alert("Estamos fechados no momento!"); return; }
-            const name = document.getElementById('cust-name').value;
-            const addr = document.getElementById('cust-address').value;
-            const pay = document.getElementById('cust-payment').value;
-            if(!name || (orderMethod==='Entrega' && !addr) || cart.length===0) { alert("Preencha todos os campos!"); return; }
+        let msg = `👑 *REI DA CHAPA*\n------------------------------\n*CLIENTE:* ${name}\n*TIPO:* ${orderMethod.toUpperCase()}\n`;
+        if(orderMethod === 'Entrega') msg += `*ENDEREÇO:* ${addr}\n`;
+        msg += `------------------------------\n*PEDIDO:*\n`;
+        cart.forEach(i => msg += `• ${i.qty}x ${i.name} - R$ ${(i.price * i.qty).toFixed(2)}\n`);
+        msg += `------------------------------\n💰 *TOTAL:* ${document.getElementById('cart-total').innerText}\n*PAGAMENTO:* ${pay}`;
+        if (pay === 'Dinheiro') msg += `\n*TROCO PARA:* R$ ${Number(change).toFixed(2).replace('.', ',')}`;
+        
+        window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`);
+    }
 
-            let msg = `👑 *REI DA CHAPA*\n------------------------------\n*CLIENTE:* ${name}\n*TIPO:* ${orderMethod.toUpperCase()}\n`;
-            if(orderMethod === 'Entrega') msg += `*ENDEREÇO:* ${addr}\n`;
-            msg += `------------------------------\n*PEDIDO:*\n`;
-            cart.forEach(i => msg += `• ${i.qty}x ${i.name} - R$ ${(i.price * i.qty).toFixed(2)}\n`);
-            msg += `------------------------------\n💰 *TOTAL:* ${document.getElementById('cart-total').innerText}\n*PAGAMENTO:* ${pay}`;
-            window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`);
+    function authAdmin() {
+        const pass = prompt("Senha do Admin:");
+        if (pass === ADMIN_PASS) {
+            const modal = document.getElementById('admin-modal');
+            tempAdminStatus = localStorage.getItem('rei_status') || 'aberto';
+            document.getElementById('admin-input-horario').value = localStorage.getItem('rei_horario') || "18:00 às 22:30";
+            setAdminStatus(tempAdminStatus); 
+            modal.classList.remove('hidden');
+        } else if (pass) { 
+            alert("Senha incorreta!"); 
         }
+    }
 
-        function authAdmin() {
-            const pass = prompt("Senha do Admin:");
-            if (pass === ADMIN_PASS) {
-                const modal = document.getElementById('admin-modal');
-                tempAdminStatus = localStorage.getItem('rei_status') || 'aberto';
-                document.getElementById('admin-input-horario').value = localStorage.getItem('rei_horario') || "18:00 às 22:30";
-                setAdminStatus(tempAdminStatus); 
-                modal.classList.remove('hidden');
-            } else if (pass) { alert("Senha incorreta!"); }
+    function setAdminStatus(status) {
+        tempAdminStatus = status;
+        const btnAberto = document.getElementById('admin-btn-aberto');
+        const btnFechado = document.getElementById('admin-btn-fechado');
+        if (status === 'aberto') {
+            btnAberto.className = "py-3 rounded-xl font-black uppercase text-xs btn-status-open-on";
+            btnFechado.className = "py-3 rounded-xl font-black uppercase text-xs btn-status-off";
+        } else {
+            btnAberto.className = "py-3 rounded-xl font-black uppercase text-xs btn-status-off";
+            btnFechado.className = "py-3 rounded-xl font-black uppercase text-xs btn-status-closed-on";
         }
+    }
 
-        function setAdminStatus(status) {
-            tempAdminStatus = status;
-            const btnAberto = document.getElementById('admin-btn-aberto');
-            const btnFechado = document.getElementById('admin-btn-fechado');
-            if (status === 'aberto') {
-                btnAberto.className = "py-4 rounded-2xl font-black uppercase text-sm btn-status-open-on";
-                btnFechado.className = "py-4 rounded-2xl font-black uppercase text-sm btn-status-off";
-            } else {
-                btnAberto.className = "py-4 rounded-2xl font-black uppercase text-sm btn-status-off";
-                btnFechado.className = "py-4 rounded-2xl font-black uppercase text-sm btn-status-closed-on";
-            }
+    function saveAdminChanges() {
+        localStorage.setItem('rei_status', tempAdminStatus);
+        localStorage.setItem('rei_horario', document.getElementById('admin-input-horario').value);
+        updateStatusUI();
+        closeAdmin();
+    }
+
+    function updateStatusUI() {
+        const status = localStorage.getItem('rei_status') || 'aberto';
+        document.getElementById('display-horario').innerText = localStorage.getItem('rei_horario') || '18:00 às 22:30';
+        
+        const dot = document.getElementById('status-loja-dot');
+        if (status === 'aberto') {
+            dot.className = "w-2 h-2 rounded-full bg-emerald-500 inline-block";
+        } else {
+            dot.className = "w-2 h-2 rounded-full bg-red-500 inline-block";
         }
+    }
 
-        function saveAdminChanges() {
-            localStorage.setItem('rei_status', tempAdminStatus);
-            localStorage.setItem('rei_horario', document.getElementById('admin-input-horario').value);
-            updateStatusUI();
-            closeAdmin();
-        }
-
-        function updateStatusUI() {
-            const status = localStorage.getItem('rei_status') || 'aberto';
-            const tag = document.getElementById('status-loja');
-            document.getElementById('display-horario').innerText = localStorage.getItem('rei_horario') || '18:00 às 22:30';
-            tag.innerText = status === 'aberto' ? "Aberto" : "Fechado";
-            tag.className = status === 'aberto' ? "bg-green-100 text-green-700 text-[9px] font-black px-2 py-1 rounded-md uppercase italic" : "bg-red-100 text-red-700 text-[9px] font-black px-2 py-1 rounded-md uppercase italic";
-        }
-
-        window.onload = () => { updateStatusUI(); renderProducts(); };
-    </script>
-
-    <footer class="p-10 text-center">
-        <button onclick="authAdmin()" class="text-gray-300 hover:text-yellow-600 transition-all">
-            <i class="fas fa-cog text-xl"></i>
-        </button>
-    </footer>
-</body>
-</html>
+    window.onload = () => { 
+        updateStatusUI(); 
+        renderProducts(); 
+        document.getElementById('cust-payment').addEventListener('change', updateChangeField);
+        updateChangeField();
+    };
+</script>
